@@ -7,6 +7,7 @@
         "CMS",
         "mfa",
         "2fa",
+        "totp",
         "security",
         "authentication"
     ],
@@ -21,8 +22,8 @@
     },
     "autoload": {
         "psr-4": {
-            "SilverStripeModule\\Skeleton\\": "src/",
-            "SilverStripeModule\\Skeleton\\Tests\\": "tests/"
+            "SilverStripe\\TOTP\\": "src/",
+            "SilverStripe\\TOTP\\Tests\\": "tests/"
         }
     },
     "extra": {
