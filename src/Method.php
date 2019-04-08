@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace SilverStripe\TOTP;
 
@@ -15,35 +15,35 @@ use SilverStripe\View\Requirements;
  */
 class Method implements MethodInterface
 {
-    public function getURLSegment()
+    public function getURLSegment(): string
     {
         return 'totp';
     }
 
-    public function getLoginHandler()
+    public function getLoginHandler(): LoginHandlerInterface
     {
         return Injector::inst()->create(LoginHandler::class);
     }
 
-    public function getRegisterHandler()
+    public function getRegisterHandler(): RegisterHandlerInterface
     {
         return Injector::inst()->create(RegisterHandler::class);
     }
 
-    public function getThumbnail()
+    public function getThumbnail(): string
     {
         return ModuleLoader::getModule('silverstripe/totp-authenticator')
             ->getResource('client/dist/images/totp.svg')
             ->getURL();
     }
 
-    public function applyRequirements()
+    public function applyRequirements(): void
     {
         Requirements::javascript('silverstripe/totp-authenticator: client/dist/js/bundle.js');
         Requirements::css('silverstripe/totp-authenticator: client/dist/styles/bundle.css');
     }
 
-    public function getDetails()
+    public function getDetails(): AvailableMethodDetailsInterface
     {
         return Injector::inst()->create(AvailableMethodDetailsInterface::class, $this);
     }

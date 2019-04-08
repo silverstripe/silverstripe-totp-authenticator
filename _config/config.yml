@@ -1,3 +1,6 @@
 ---
 Name: totpauthenticatorconfig
 ---
+SilverStripe\MFA\Service\MethodRegistry:
+  methods:
+    totp: SilverStripe\TOTP\Method

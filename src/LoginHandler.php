@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace SilverStripe\TOTP;
 
@@ -12,22 +12,22 @@ use SilverStripe\MFA\Store\StoreInterface;
  */
 class LoginHandler implements LoginHandlerInterface
 {
-    public function start(StoreInterface $store, RegisteredMethod $method)
+    public function start(StoreInterface $store, RegisteredMethod $method): array
     {
         // TODO: Implement start() method.
     }
 
-    public function verify(HTTPRequest $request, StoreInterface $store, RegisteredMethod $registeredMethod)
+    public function verify(HTTPRequest $request, StoreInterface $store, RegisteredMethod $registeredMethod): bool
     {
         // TODO: Implement verify() method.
     }
 
-    public function getLeadInLabel()
+    public function getLeadInLabel(): string
     {
         // TODO: Implement getLeadInLabel() method.
     }
 
-    public function getComponent()
+    public function getComponent(): string
     {
         // TODO: Implement getComponent() method.
     }

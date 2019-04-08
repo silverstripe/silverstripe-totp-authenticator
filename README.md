@@ -19,3 +19,8 @@ Install with Composer:
 ```
 composer require silverstripe/totp-authenticator
 ```
+
+## Configuration
+
+You will need to define an environment variable named `SS_MFA_SECRET_KEY` with a random secret key, which is used
+for encrypting the TOTP secret. The authentication method will not be available for use until this is correctly defined.
