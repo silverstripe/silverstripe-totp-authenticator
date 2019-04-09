@@ -1,0 +1,65 @@
+$totp-img-height: 200px;
+$scan-qr-height: 160px;
+$scan-qr-manual-border-color: #cccccc;
+
+.mfa-register-totp {
+  // Note: .form-control added for specificity
+  &__code.form-control {
+    font-size: 2rem;
+    letter-spacing: 1rem;
+    text-align: center;
+    width: 80%;
+  }
+
+  &__validate-code {
+    display: flex;
+  }
+
+  &__validate-left {
+    flex: 1;
+  }
+
+  &__validate-img {
+    height: $totp-img-height;
+  }
+
+  &__validate-right {
+    margin-left: 1rem;
+    margin-top: -2rem;
+    text-align: center;
+  }
+
+  &__scan-code {
+    align-items: stretch;
+    display: flex;
+  }
+
+  // QR code container
+  &__scan-left {
+    flex: 1;
+    height: $scan-qr-height;
+  }
+
+  &__scan-middle {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    text-transform: uppercase;
+  }
+
+  // Manual code entry area
+  &__scan-right {
+    border: 1px solid $scan-qr-manual-border-color;
+    display: flex;
+    flex: 2;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
+
+    p:last-child {
+      margin: 0;
+    }
+  }
+}
