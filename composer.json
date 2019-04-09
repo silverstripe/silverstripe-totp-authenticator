@@ -7,11 +7,13 @@
         "CMS",
         "mfa",
         "2fa",
+        "totp",
         "security",
         "authentication"
     ],
     "license": "BSD-3-Clause",
     "require": {
+        "php": ">=7.1.0",
         "silverstripe/mfa": "^4.0",
         "spomky-labs/otphp": "^9.1"
     },
@@ -21,8 +23,8 @@
     },
     "autoload": {
         "psr-4": {
-            "SilverStripeModule\\Skeleton\\": "src/",
-            "SilverStripeModule\\Skeleton\\Tests\\": "tests/"
+            "SilverStripe\\TOTP\\": "src/",
+            "SilverStripe\\TOTP\\Tests\\": "tests/"
         }
     },
     "extra": {
