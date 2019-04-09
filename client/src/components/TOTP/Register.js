@@ -107,23 +107,30 @@ class Register extends Component {
     }
 
     return (
-      <div className="mfa-register-totp__scan-code">
-        <div className="mfa-register-totp__scan-left">
-          <QRCode value={uri} size={160} />
-        </div>
+      <div className="mfa-register-totp__scan">
+        <p>{ i18n._t(
+          'TOTPRegister.INTRO',
+          'Use an authentication app such as Google Authenticator to scan the following code. '
+        ) }{ this.renderSupportLink() }</p>
 
-        <div className="mfa-register-totp__scan-middle">
-          {i18n._t('TOTPRegister.OR', 'Or')}
-        </div>
+        <div className="mfa-register-totp__scan-code">
+          <div className="mfa-register-totp__scan-left">
+            <QRCode value={uri} size={160} />
+          </div>
 
-        <div className="mfa-register-totp__scan-right">
-          <p>{i18n._t(
-            'TOTPRegister.MANUAL',
-            'Enter manually the following code into authentication app:'
-          )}</p>
-          <p className="mfa-register-totp__manual-code">
-            { code }
-          </p>
+          <div className="mfa-register-totp__scan-middle">
+            {i18n._t('TOTPRegister.OR', 'Or')}
+          </div>
+
+          <div className="mfa-register-totp__scan-right">
+            <p>{i18n._t(
+              'TOTPRegister.MANUAL',
+              'Enter manually the following code into authentication app:'
+            )}</p>
+            <p className="mfa-register-totp__manual-code">
+              { code }
+            </p>
+          </div>
         </div>
       </div>
     );
@@ -170,7 +177,7 @@ class Register extends Component {
         <div className="mfa-register-totp__validate-left">
           <p>{ i18n._t(
             'TOTPRegister.VERIFY',
-            'Use verification code from your authenticator app.'
+            'Use verification code from your authenticator app. '
             ) }{ this.renderSupportLink() }</p>
 
           <label htmlFor="totp-code">
@@ -214,6 +221,7 @@ class Register extends Component {
 Register.propTypes = {
   code: PropTypes.string.isRequired,
   onBack: PropTypes.func.isRequired,
+  method: PropTypes.object.isRequired,
   onCompleteRegistration: PropTypes.func.isRequired,
   uri: PropTypes.string.isRequired,
 };

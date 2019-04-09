@@ -17,6 +17,10 @@ $scan-qr-manual-border-color: #cccccc;
 
   &__validate-left {
     flex: 1;
+
+    p {
+      margin-bottom: 3rem;
+    }
   }
 
   &__validate-img {
@@ -32,6 +36,7 @@ $scan-qr-manual-border-color: #cccccc;
   &__scan-code {
     align-items: stretch;
     display: flex;
+    margin: 3rem 0;
   }
 
   // QR code container
