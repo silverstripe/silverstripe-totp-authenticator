@@ -62,6 +62,42 @@ describe('Register', () => {
     });
   });
 
+  describe('handleInputKeyUp()', () => {
+    it('treats enter key as a form submission when code is valid', () => {
+      const wrapper = shallow(
+        <Register
+          onBack={onBackMock}
+          onCompleteRegistration={onCompleteRegistrationMock}
+          method={mockMethod}
+          code="FOO123"
+          uri="example"
+        />
+      );
+
+      wrapper.find('.mfa-actions__action--next').simulate('click');
+      wrapper.instance().setState({ code: '123456' });
+      wrapper.find('.mfa-register-totp__code').simulate('keyup', { keyCode: 13 });
+      expect(onCompleteRegistrationMock.mock.calls).toHaveLength(1);
+    });
+
+    it('does nothing when code is not valid', () => {
+      const wrapper = shallow(
+        <Register
+          onBack={onBackMock}
+          onCompleteRegistration={onCompleteRegistrationMock}
+          method={mockMethod}
+          code="FOO123"
+          uri="example"
+        />
+      );
+
+      wrapper.find('.mfa-actions__action--next').simulate('click');
+      wrapper.instance().setState({ code: 'ABC' });
+      wrapper.find('.mfa-register-totp__code').simulate('keyup', { keyCode: 13 });
+      expect(onCompleteRegistrationMock.mock.calls).toHaveLength(0);
+    });
+  });
+
   describe('handleSubmit()', () => {
     it('calls the onCompleteRegistration prop and passes the code', () => {
       const wrapper = shallow(
@@ -78,6 +114,54 @@ describe('Register', () => {
       wrapper.instance().handleSubmit();
       expect(onCompleteRegistrationMock.mock.calls.length).toBe(1);
       expect(onCompleteRegistrationMock.mock.calls[0][0]).toEqual({ code: 'FOO468' });
+    });
+  });
+
+  describe('canSubmit()', () => {
+    it('returns false when not on the VALIDATE_CODE screen', () => {
+      const wrapper = shallow(
+        <Register
+          onBack={onBackMock}
+          onCompleteRegistration={onCompleteRegistrationMock}
+          method={mockMethod}
+          code="FOO123"
+          uri="example"
+        />
+      );
+
+      expect(wrapper.instance().canSubmit()).toBe(false);
+    });
+
+    it('returns false when code is not 6 chars', () => {
+      const wrapper = shallow(
+        <Register
+          onBack={onBackMock}
+          onCompleteRegistration={onCompleteRegistrationMock}
+          method={mockMethod}
+          code="FOO123"
+          uri="example"
+        />
+      );
+
+      wrapper.find('.mfa-actions__action--next').simulate('click');
+      wrapper.instance().setState({ code: '12345' });
+      expect(wrapper.instance().canSubmit()).toBe(false);
+    });
+
+    it('returns true when code is 6 chars and on VALIADTE_CODE screen', () => {
+      const wrapper = shallow(
+        <Register
+          onBack={onBackMock}
+          onCompleteRegistration={onCompleteRegistrationMock}
+          method={mockMethod}
+          code="FOO123"
+          uri="example"
+        />
+      );
+
+      wrapper.find('.mfa-actions__action--next').simulate('click');
+      wrapper.instance().setState({ code: '123456' });
+      expect(wrapper.instance().canSubmit()).toBe(true);
     });
   });
 

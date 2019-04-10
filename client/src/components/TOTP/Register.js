@@ -25,6 +25,7 @@ class Register extends Component {
 
     this.handleBack = this.handleBack.bind(this);
     this.handleChangeCode = this.handleChangeCode.bind(this);
+    this.handleInputKeyUp = this.handleInputKeyUp.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -47,11 +48,34 @@ class Register extends Component {
   }
 
   /**
+   * Track enter key presses and submit the form if the field is valid
+   *
+   * @param {object} event
+   */
+  handleInputKeyUp(event) {
+    if (this.canSubmit() && event.keyCode === 13) {
+      this.handleSubmit();
+    }
+  }
+
+  /**
    * Delegate the completion of registration to the handler passed in as a prop. The MFA module
    * will provide this as an API request to the TOTP backend RegisterHandler's register() method.
    */
   handleSubmit() {
     this.props.onCompleteRegistration({ code: this.state.code });
+  }
+
+  /**
+   * Determines whether the form can be submitted. This is true when on the "validate code"
+   * screen and an input code of 6 chars is entered
+   *
+   * @returns {boolean}
+   */
+  canSubmit() {
+    const { code, view } = this.state;
+
+    return view === VIEWS.VALIDATE && code.length === 6;
   }
 
   /**
@@ -61,7 +85,7 @@ class Register extends Component {
    * @returns {HTMLElement}
    */
   renderActionsMenu() {
-    const { view, code } = this.state;
+    const { view } = this.state;
     const { ss: { i18n } } = window;
 
     // Define the click handlers depending on which view we're in
@@ -74,8 +98,7 @@ class Register extends Component {
         : () => this.setState({ view: VIEWS.SCAN }),
     };
 
-    // Determine whether the Next button should be disabled
-    const isNextDisabled = view === VIEWS.VALIDATE && code.length !== 6;
+    const isNextDisabled = view === VIEWS.VALIDATE && !this.canSubmit();
 
     return (
       <div className="mfa-actions">
@@ -199,6 +222,7 @@ class Register extends Component {
             className="mfa-register-totp__code form-control input-lg"
             value={code}
             onChange={this.handleChangeCode}
+            onKeyUp={this.handleInputKeyUp}
           />
         </div>
 

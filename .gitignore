@@ -1,2 +1,4 @@
 node_modules
 coverage/
+/**/*.js.map
+/**/*.css.map
