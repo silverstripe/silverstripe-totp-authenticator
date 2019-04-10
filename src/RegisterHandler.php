@@ -4,6 +4,7 @@ namespace SilverStripe\TOTP;
 
 use OTPHP\TOTP;
 use OTPHP\TOTPInterface;
+use ParagonIE\ConstantTime\Base32;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Environment;
@@ -12,6 +13,7 @@ use SilverStripe\MFA\Exception\AuthenticationFailedException;
 use SilverStripe\MFA\Method\Handler\RegisterHandlerInterface;
 use SilverStripe\MFA\Service\EncryptionAdapterInterface;
 use SilverStripe\MFA\Store\StoreInterface;
+use SilverStripe\SiteConfig\SiteConfig;
 
 /**
  * Handles registration requests using a time-based one-time password (TOTP) with the silverstripe/mfa module.
@@ -29,12 +31,21 @@ class RegisterHandler implements RegisterHandlerInterface
      */
     private static $user_help_link = '';
 
+    /**
+     * The desired length of the TOTP secret. This affects the UI, since it is displayed to the user to be entered
+     * manually if they cannot scan the QR code.
+     *
+     * @config
+     * @var int
+     */
+    private static $secret_length = 16;
+
     public function start(StoreInterface $store): array
     {
         $totp = $this->getTotp($store);
 
         $totp->setLabel($store->getMember()->Email);
-        $totp->setIssuer('SilverStripe');
+        $totp->setIssuer(SiteConfig::current_site_config()->Title);
 
 
         $store->setState([
@@ -44,6 +55,7 @@ class RegisterHandler implements RegisterHandlerInterface
         return [
             'enabled' => !empty(Environment::getEnv('SS_MFA_SECRET_KEY')),
             'uri' => $totp->getProvisioningUri(),
+            'code' => $totp->getSecret(),
         ];
     }
 
@@ -56,7 +68,18 @@ class RegisterHandler implements RegisterHandlerInterface
     protected function getTotp(StoreInterface $store): TOTPInterface
     {
         $state = $store->getState();
-        return TOTP::create($state['secret'] ?? null);
+        return TOTP::create($state['secret'] ?? $this->generateSecret());
+    }
+
+    /**
+     * Generates a TOTP secret to the configured maximum length
+     *
+     * @return string
+     */
+    protected function generateSecret(): string
+    {
+        $length = $this->config()->get('secret_length');
+        return substr(trim(Base32::encodeUpper(random_bytes(64)), '='), 0, $length);
     }
 
     /**
