@@ -11,8 +11,8 @@ use SilverStripe\Dev\SapphireTest;
 use SilverStripe\MFA\Store\SessionStore;
 use SilverStripe\MFA\Store\StoreInterface;
 use SilverStripe\Security\Member;
+use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\TOTP\RegisterHandler;
-use function base64_encode;
 
 class RegisterHandlerTest extends SapphireTest
 {
@@ -53,7 +53,7 @@ class RegisterHandlerTest extends SapphireTest
 
         $this->assertTrue($result['enabled'], 'Method should be enabled');
         $this->assertContains(
-            'SilverStripe',
+            rawurlencode(SiteConfig::current_site_config()->Title),
             $result['uri'],
             'Site name should be stored in provisioning URI'
         );

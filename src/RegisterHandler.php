@@ -76,7 +76,7 @@ class RegisterHandler implements RegisterHandlerInterface
      *
      * @return string
      */
-    protected function generateSecret()
+    protected function generateSecret(): string
     {
         $length = $this->config()->get('secret_length');
         return substr(trim(Base32::encodeUpper(random_bytes(64)), '='), 0, $length);
