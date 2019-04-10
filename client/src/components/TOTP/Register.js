@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react';
+import { formatCode } from 'lib/formatCode';
 
 /**
  * This component provides the user interface for registering one-time time-based passwords (TOTP)
@@ -106,6 +107,8 @@ class Register extends Component {
       return null;
     }
 
+    const formattedCode = formatCode(code);
+
     return (
       <div className="mfa-register-totp__scan">
         <p>{ i18n._t(
@@ -128,7 +131,7 @@ class Register extends Component {
               'Enter manually the following code into authentication app:'
             )}</p>
             <p className="mfa-register-totp__manual-code">
-              { code }
+              { formattedCode }
             </p>
           </div>
         </div>
