@@ -1,6 +1,7 @@
 $totp-img-height: 200px;
 $scan-qr-height: 160px;
 $scan-qr-manual-border-color: #cccccc;
+$viewport-small: 480px;
 
 .mfa-register-totp {
   // Note: .form-control added for specificity
@@ -64,6 +65,21 @@ $scan-qr-manual-border-color: #cccccc;
 
     p:last-child {
       margin: 0;
+    }
+  }
+}
+
+// Mobile only
+@media (max-width: $viewport-small) {
+  .mfa-register-totp {
+    &__scan-code {
+      align-items: center;
+      flex-direction: column;
+    }
+
+    &__scan-left,
+    &__scan-middle {
+      margin-bottom: 1rem;
     }
   }
 }
