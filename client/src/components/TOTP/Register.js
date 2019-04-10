@@ -5,6 +5,11 @@ import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react';
 import { formatCode } from 'lib/formatCode';
 
+const VIEWS = {
+  SCAN: 'SCAN_CODE',
+  VALIDATE: 'VALIDATE_CODE',
+};
+
 /**
  * This component provides the user interface for registering one-time time-based passwords (TOTP)
  * with a user.
@@ -14,7 +19,7 @@ class Register extends Component {
     super(props);
 
     this.state = {
-      view: 'SCAN_CODE',
+      view: VIEWS.SCAN,
       code: '',
     };
 
@@ -61,16 +66,16 @@ class Register extends Component {
 
     // Define the click handlers depending on which view we're in
     const handlers = {
-      next: view === 'SCAN_CODE'
-        ? () => this.setState({ view: 'VALIDATE_CODE' })
+      next: view === VIEWS.SCAN
+        ? () => this.setState({ view: VIEWS.VALIDATE })
         : this.handleSubmit,
-      back: view === 'SCAN_CODE'
+      back: view === VIEWS.SCAN
         ? this.handleBack
-        : () => this.setState({ view: 'SCAN_CODE' }),
+        : () => this.setState({ view: VIEWS.SCAN }),
     };
 
     // Determine whether the Next button should be disabled
-    const isNextDisabled = view === 'VALIDATE_CODE' && code.length !== 6;
+    const isNextDisabled = view === VIEWS.VALIDATE && code.length !== 6;
 
     return (
       <div className="mfa-actions">
@@ -103,7 +108,7 @@ class Register extends Component {
     const { view } = this.state;
     const { ss: { i18n } } = window;
 
-    if (view !== 'SCAN_CODE') {
+    if (view !== VIEWS.SCAN) {
       return null;
     }
 
@@ -171,7 +176,7 @@ class Register extends Component {
     const { method } = this.props;
     const { ss: { i18n } } = window;
 
-    if (view !== 'VALIDATE_CODE') {
+    if (view !== VIEWS.VALIDATE) {
       return null;
     }
 
