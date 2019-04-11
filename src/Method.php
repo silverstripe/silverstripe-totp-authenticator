@@ -2,6 +2,7 @@
 
 namespace SilverStripe\TOTP;
 
+use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Core\Manifest\ModuleLoader;
 use SilverStripe\MFA\Method\Handler\LoginHandlerInterface;
@@ -43,8 +44,18 @@ class Method implements MethodInterface
         Requirements::css('silverstripe/totp-authenticator: client/dist/styles/bundle.css');
     }
 
-    public function getDetails(): AvailableMethodDetailsInterface
+    /**
+     * TOTP authentication is only available if the required environment variable is set to enable encryption.
+     *
+     * @return bool
+     */
+    public function isAvailable(): bool
     {
-        return Injector::inst()->create(AvailableMethodDetailsInterface::class, $this);
+        return !empty(Environment::getEnv('SS_MFA_SECRET_KEY'));
+    }
+
+    public function getUnavailableMessage(): string
+    {
+        return _t(__CLASS__ . '.NOT_CONFIGURED', 'This method has not been configured yet.');
     }
 }

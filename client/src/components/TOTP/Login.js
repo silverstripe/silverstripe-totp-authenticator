@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 /**
- * This component provides the user interface for registering one-time time-based passwords (TOTP)
- * with a user.
+ * This component provides the user interface for logging in with a one-time time-based password
+ * (TOTP) for a user.
  */
 class Login extends Component {
   constructor(props) {

@@ -102,13 +102,4 @@ class RegisterHandlerTest extends SapphireTest
             'Encrypted secret should not contain the plain text secret'
         );
     }
-
-    public function testIsAvailable()
-    {
-        Environment::setEnv('SS_MFA_SECRET_KEY', '');
-        $this->assertFalse($this->handler->isAvailable());
-
-        Environment::setEnv('SS_MFA_SECRET_KEY', 'foo123');
-        $this->assertTrue($this->handler->isAvailable());
-    }
 }

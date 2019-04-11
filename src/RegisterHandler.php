@@ -2,7 +2,6 @@
 
 namespace SilverStripe\TOTP;
 
-use Exception;
 use ParagonIE\ConstantTime\Base32;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Config\Configurable;
@@ -52,7 +51,7 @@ class RegisterHandler implements RegisterHandlerInterface
         $totp->setIssuer(SiteConfig::current_site_config()->Title);
 
         return [
-            'enabled' => $this->isAvailable(),
+            'enabled' => !empty(Environment::getEnv('SS_MFA_SECRET_KEY')),
             'uri' => $totp->getProvisioningUri(),
             'code' => $totp->getSecret(),
         ];
@@ -123,20 +122,5 @@ class RegisterHandler implements RegisterHandlerInterface
     public function getComponent(): string
     {
         return 'TOTPRegister';
-    }
-
-    /**
-     * TOTP authentication is only available if the required environment variable is set to enable encryption.
-     *
-     * @return bool
-     */
-    public function isAvailable(): bool
-    {
-        return !empty($this->getEncryptionKey());
-    }
-
-    public function getUnavailableMessage(): string
-    {
-        return _t(__CLASS__ . '.NOT_CONFIGURED', 'This method has not been configured yet.');
     }
 }
