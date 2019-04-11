@@ -16,17 +16,9 @@ class Login extends Component {
       code: '',
     };
 
-    this.handleBack = this.handleBack.bind(this);
     this.handleChangeCode = this.handleChangeCode.bind(this);
     this.handleInputKeyUp = this.handleInputKeyUp.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  /**
-   * Send the user back to the "select method" screen
-   */
-  handleBack() {
-    this.props.onBack();
   }
 
   /**
@@ -90,7 +82,7 @@ class Login extends Component {
           disabled={isNextDisabled}
           onClick={this.handleSubmit}
         >
-          { i18n._t('TOTPRegister.NEXT', 'Next') }
+          { i18n._t('TOTPLogin.NEXT', 'Next') }
         </button>
         { moreOptionsControl }
       </div>
@@ -114,7 +106,7 @@ class Login extends Component {
 
     return (
       <a href={method.supportLink} target="_blank" rel="noopener noreferrer">
-        { i18n._t('TOTPRegister.HOW_TO_USE', 'How to use authenticator app.') }
+        { i18n._t('TOTPLogin.HOW_TO_USE', 'How to use authenticator app.') }
       </a>
     );
   }
@@ -136,7 +128,7 @@ class Login extends Component {
             'Use verification code from your authenticator app. '
           ) }{ this.renderSupportLink() }</p>
 
-          <label htmlFor="totp-code">
+          <label htmlFor="totp-code" className="control-label">
             { /* todo make this configurable */ }
             { i18n._t('TOTPLogin.ENTER_CODE', 'Enter 6-digit code') }
           </label>
@@ -179,8 +171,15 @@ class Login extends Component {
 }
 
 Login.propTypes = {
+  error: PropTypes.string,
   onCompleteLogin: PropTypes.func.isRequired,
   method: PropTypes.object.isRequired,
 };
+
+Login.defaultProps = {
+  error: null,
+};
+
+Login.displayName = 'TOTPLogin';
 
 export default Login;

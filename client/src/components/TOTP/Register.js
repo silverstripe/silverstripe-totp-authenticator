@@ -1,10 +1,10 @@
 /* global window */
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react';
 import { formatCode } from 'lib/formatCode';
-import { inject } from 'lib/Injector';
+import { inject } from 'lib/Injector'; // eslint-disable-line
 
 const VIEWS = {
   SCAN: 'SCAN_CODE',
@@ -87,32 +87,35 @@ class Register extends Component {
     const formattedCode = formatCode(code);
 
     return (
-      <div className="mfa-totp__scan">
-        <p>{ i18n._t(
-          'TOTPRegister.INTRO',
-          'Use an authentication app such as Google Authenticator to scan the following code. '
-        ) }{ this.renderSupportLink() }</p>
+      <Fragment>
+        <div className="mfa-totp__scan">
+          <p>{ i18n._t(
+            'TOTPRegister.INTRO',
+            'Use an authentication app such as Google Authenticator to scan the following code. '
+          ) }{ this.renderSupportLink() }</p>
 
-        <div className="mfa-totp__scan-code">
-          <div className="mfa-totp__scan-left">
-            <QRCode value={uri} size={160} />
-          </div>
+          <div className="mfa-totp__scan-code">
+            <div className="mfa-totp__scan-left">
+              <QRCode value={uri} size={160} />
+            </div>
 
-          <div className="mfa-totp__scan-middle">
-            {i18n._t('TOTPRegister.OR', 'Or')}
-          </div>
+            <div className="mfa-totp__scan-middle">
+              {i18n._t('TOTPRegister.OR', 'Or')}
+            </div>
 
-          <div className="mfa-totp__scan-right">
-            <p>{i18n._t(
-              'TOTPRegister.MANUAL',
-              'Enter manually the following code into authentication app:'
-            )}</p>
-            <p className="mfa-totp__manual-code">
-              { formattedCode }
-            </p>
+            <div className="mfa-totp__scan-right">
+              <p>{i18n._t(
+                'TOTPRegister.MANUAL',
+                'Enter manually the following code into authentication app:'
+              )}</p>
+              <p className="mfa-totp__manual-code">
+                { formattedCode }
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+        { this.renderActionsMenu() }
+      </Fragment>
     );
   }
 
@@ -138,6 +141,25 @@ class Register extends Component {
   }
 
   /**
+   * The back button for the login screen should send you back to the register screen
+   *
+   * @return HTMLElement|null
+   */
+  renderBackButtonForLogin() {
+    const { ss: { i18n } } = window;
+
+    return (
+      <button
+        type="button"
+        className="mfa-actions__action mfa-actions__action--back btn"
+        onClick={() => this.setState({ view: VIEWS.SCAN })}
+      >
+        { i18n._t('TOTPRegister.BACK', 'Back') }
+      </button>
+    );
+  }
+
+  /**
    * Renders the screen to input and validate the TOTP code, after having registered it via QR
    * code with an authenticator app.
    *
@@ -153,12 +175,13 @@ class Register extends Component {
 
     const loginProps = {
       ...this.props,
+      moreOptionsControl: this.renderBackButtonForLogin(),
       // Renaming registration callback so it fits in the Login context
       onCompleteLogin: onCompleteRegistration,
       onCompleteRegistration: null,
     };
 
-    return <TOTPLoginComponent { ...loginProps } />;
+    return <TOTPLoginComponent {...loginProps} />;
   }
 
   render() {
@@ -166,7 +189,6 @@ class Register extends Component {
       <div className="mfa-totp__container mfa-totp__container--register">
         { this.renderScanCodeScreen() }
         { this.renderValidateCodeScreen() }
-        { this.renderActionsMenu() }
       </div>
     );
   }
@@ -181,10 +203,14 @@ Register.propTypes = {
   TOTPLoginComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
 };
 
+Register.displayName = 'TOTPRegister';
+
+export { Register as Component };
+
 export default inject(
   ['TOTPLogin'],
   (TOTPLoginComponent) => ({
     TOTPLoginComponent,
   }),
-  ({ contextKey }) => `MFA.Register.${contextKey}`
+  () => 'MFA.Register'
 )(Register);
