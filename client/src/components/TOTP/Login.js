@@ -16,9 +16,20 @@ class Login extends Component {
       code: '',
     };
 
+    this.codeInput = React.createRef();
+
     this.handleChangeCode = this.handleChangeCode.bind(this);
     this.handleInputKeyUp = this.handleInputKeyUp.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  /**
+   * Automatically set the focus to the code input field when the component is rendered
+   */
+  componentDidMount() {
+    if (this.codeInput.current) {
+      this.codeInput.current.focus();
+    }
   }
 
   /**
@@ -144,6 +155,7 @@ class Login extends Component {
             maxLength={codeLength}
             className="mfa-totp__code form-control input-lg"
             value={code}
+            ref={this.codeInput}
             onChange={this.handleChangeCode}
             onKeyUp={this.handleInputKeyUp}
           />
