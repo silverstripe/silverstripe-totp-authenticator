@@ -3,7 +3,7 @@ $scan-qr-height: 160px;
 $scan-qr-manual-border-color: #cccccc;
 $viewport-small: 480px;
 
-.mfa-register-totp {
+.mfa-totp {
   // Note: .form-control added for specificity
   &__code.form-control {
     font-size: 2rem;

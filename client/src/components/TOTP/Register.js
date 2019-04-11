@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react';
 import { formatCode } from 'lib/formatCode';
+import { inject } from 'lib/Injector';
 
 const VIEWS = {
   SCAN: 'SCAN_CODE',
@@ -20,13 +21,10 @@ class Register extends Component {
 
     this.state = {
       view: VIEWS.SCAN,
-      code: '',
     };
 
     this.handleBack = this.handleBack.bind(this);
-    this.handleChangeCode = this.handleChangeCode.bind(this);
-    this.handleInputKeyUp = this.handleInputKeyUp.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleNext = this.handleNext.bind(this);
   }
 
   /**
@@ -37,45 +35,10 @@ class Register extends Component {
   }
 
   /**
-   * Updates the code in the state when changing the input field
-   *
-   * @param {object} event
+   * After user has scanned the QR code, handle the transition to the login screen
    */
-  handleChangeCode(event) {
-    this.setState({
-      code: event.target.value,
-    });
-  }
-
-  /**
-   * Track enter key presses and submit the form if the field is valid
-   *
-   * @param {object} event
-   */
-  handleInputKeyUp(event) {
-    if (this.canSubmit() && event.keyCode === 13) {
-      this.handleSubmit();
-    }
-  }
-
-  /**
-   * Delegate the completion of registration to the handler passed in as a prop. The MFA module
-   * will provide this as an API request to the TOTP backend RegisterHandler's register() method.
-   */
-  handleSubmit() {
-    this.props.onCompleteRegistration({ code: this.state.code });
-  }
-
-  /**
-   * Determines whether the form can be submitted. This is true when on the "validate code"
-   * screen and an input code of 6 chars is entered
-   *
-   * @returns {boolean}
-   */
-  canSubmit() {
-    const { code, view } = this.state;
-
-    return view === VIEWS.VALIDATE && code.length === 6;
+  handleNext() {
+    this.setState({ view: VIEWS.VALIDATE });
   }
 
   /**
@@ -85,35 +48,21 @@ class Register extends Component {
    * @returns {HTMLElement}
    */
   renderActionsMenu() {
-    const { view } = this.state;
     const { ss: { i18n } } = window;
-
-    // Define the click handlers depending on which view we're in
-    const handlers = {
-      next: view === VIEWS.SCAN
-        ? () => this.setState({ view: VIEWS.VALIDATE })
-        : this.handleSubmit,
-      back: view === VIEWS.SCAN
-        ? this.handleBack
-        : () => this.setState({ view: VIEWS.SCAN }),
-    };
-
-    const isNextDisabled = view === VIEWS.VALIDATE && !this.canSubmit();
 
     return (
       <div className="mfa-actions">
         <button
           type="button"
           className="mfa-actions__action mfa-actions__action--next btn btn-success"
-          disabled={isNextDisabled}
-          onClick={handlers.next}
+          onClick={this.handleNext}
         >
           { i18n._t('TOTPRegister.NEXT', 'Next') }
         </button>
         <button
           type="button"
           className="mfa-actions__action mfa-actions__action--back btn"
-          onClick={handlers.back}
+          onClick={this.handleBack}
         >
           { i18n._t('TOTPRegister.BACK', 'Back') }
         </button>
@@ -138,27 +87,27 @@ class Register extends Component {
     const formattedCode = formatCode(code);
 
     return (
-      <div className="mfa-register-totp__scan">
+      <div className="mfa-totp__scan">
         <p>{ i18n._t(
           'TOTPRegister.INTRO',
           'Use an authentication app such as Google Authenticator to scan the following code. '
         ) }{ this.renderSupportLink() }</p>
 
-        <div className="mfa-register-totp__scan-code">
-          <div className="mfa-register-totp__scan-left">
+        <div className="mfa-totp__scan-code">
+          <div className="mfa-totp__scan-left">
             <QRCode value={uri} size={160} />
           </div>
 
-          <div className="mfa-register-totp__scan-middle">
+          <div className="mfa-totp__scan-middle">
             {i18n._t('TOTPRegister.OR', 'Or')}
           </div>
 
-          <div className="mfa-register-totp__scan-right">
+          <div className="mfa-totp__scan-right">
             <p>{i18n._t(
               'TOTPRegister.MANUAL',
               'Enter manually the following code into authentication app:'
             )}</p>
-            <p className="mfa-register-totp__manual-code">
+            <p className="mfa-totp__manual-code">
               { formattedCode }
             </p>
           </div>
@@ -195,53 +144,26 @@ class Register extends Component {
    * @returns {HTMLElement}
    */
   renderValidateCodeScreen() {
-    const { view, code } = this.state;
-    const { method } = this.props;
-    const { ss: { i18n } } = window;
+    const { view } = this.state;
+    const { TOTPLoginComponent, onCompleteRegistration } = this.props;
 
     if (view !== VIEWS.VALIDATE) {
       return null;
     }
 
-    return (
-      <div className="mfa-register-totp__validate-code">
-        <div className="mfa-register-totp__validate-left">
-          <p>{ i18n._t(
-            'TOTPRegister.VERIFY',
-            'Use verification code from your authenticator app. '
-            ) }{ this.renderSupportLink() }</p>
+    const loginProps = {
+      ...this.props,
+      // Renaming registration callback so it fits in the Login context
+      onCompleteLogin: onCompleteRegistration,
+      onCompleteRegistration: null,
+    };
 
-          <label htmlFor="totp-code">
-            { i18n._t('TOTPRegister.ENTER_CODE', 'Enter 6-digit code') }
-          </label>
-          <input
-            id="totp-code"
-            name="code"
-            type="text"
-            maxLength="6"
-            className="mfa-register-totp__code form-control input-lg"
-            value={code}
-            onChange={this.handleChangeCode}
-            onKeyUp={this.handleInputKeyUp}
-          />
-        </div>
-
-        {method.thumbnail && (
-          <div className="mfa-register-totp__validate-right">
-            <img
-              src={method.thumbnail}
-              alt={method.name}
-              className="mfa-register-totp__validate-img"
-            />
-          </div>
-        )}
-      </div>
-    );
+    return <TOTPLoginComponent { ...loginProps } />;
   }
 
   render() {
     return (
-      <div className="mfa-register-totp__container">
+      <div className="mfa-totp__container mfa-totp__container--register">
         { this.renderScanCodeScreen() }
         { this.renderValidateCodeScreen() }
         { this.renderActionsMenu() }
@@ -253,9 +175,16 @@ class Register extends Component {
 Register.propTypes = {
   code: PropTypes.string.isRequired,
   onBack: PropTypes.func.isRequired,
-  method: PropTypes.object.isRequired,
   onCompleteRegistration: PropTypes.func.isRequired,
+  method: PropTypes.object.isRequired,
   uri: PropTypes.string.isRequired,
+  TOTPLoginComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
 };
 
-export default Register;
+export default inject(
+  ['TOTPLogin'],
+  (TOTPLoginComponent) => ({
+    TOTPLoginComponent,
+  }),
+  ({ contextKey }) => `MFA.Register.${contextKey}`
+)(Register);
