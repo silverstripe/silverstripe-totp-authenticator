@@ -59,7 +59,7 @@ class Login extends Component {
    * @returns {boolean}
    */
   canSubmit() {
-    return this.state.code.length === 6;
+    return this.state.code.length === this.props.codeLength;
   }
 
   /**
@@ -113,7 +113,7 @@ class Login extends Component {
 
   renderVerifyForm() {
     const { code } = this.state;
-    const { method, error } = this.props;
+    const { codeLength, error, method } = this.props;
     const { ss: { i18n } } = window;
 
     const formGroupClasses = classnames('mfa-totp__validate-left form-group', {
@@ -129,14 +129,19 @@ class Login extends Component {
           ) }{ this.renderSupportLink() }</p>
 
           <label htmlFor="totp-code" className="control-label">
-            { /* todo make this configurable */ }
-            { i18n._t('TOTPLogin.ENTER_CODE', 'Enter 6-digit code') }
+            {
+              i18n.inject(
+                i18n._t('TOTPLogin.ENTER_CODE', 'Enter {length}-digit code'),
+                { length: codeLength }
+              )
+            }
           </label>
           <input
             id="totp-code"
             name="code"
             type="text"
-            maxLength="6"
+            autoComplete="off"
+            maxLength={codeLength}
             className="mfa-totp__code form-control input-lg"
             value={code}
             onChange={this.handleChangeCode}
@@ -171,12 +176,14 @@ class Login extends Component {
 }
 
 Login.propTypes = {
+  codeLength: PropTypes.number,
   error: PropTypes.string,
   onCompleteLogin: PropTypes.func.isRequired,
   method: PropTypes.object.isRequired,
 };
 
 Login.defaultProps = {
+  codeLength: 6,
   error: null,
 };
 

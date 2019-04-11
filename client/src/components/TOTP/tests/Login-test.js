@@ -8,7 +8,10 @@ import Login from '../Login';
 Enzyme.configure({ adapter: new Adapter() });
 
 window.ss = {
-  i18n: { _t: (key, string) => string },
+  i18n: {
+    inject: (string) => string,
+    _t: (key, string) => string
+  },
 };
 
 const mockMethod = {
@@ -191,6 +194,29 @@ describe('Login', () => {
       );
 
       expect(wrapper.find('.mfa-totp__validate-img')).toHaveLength(1);
+    });
+
+    it('defaults to a 6 character code length', () => {
+      const wrapper = shallow(
+        <Login
+          onCompleteLogin={onCompleteLoginMock}
+          method={mockMethod}
+        />
+      );
+
+      expect(wrapper.find('.mfa-totp__code').props().maxLength).toBe(6);
+    });
+
+    it('allows the code length to be configured', () => {
+      const wrapper = shallow(
+        <Login
+          codeLength={12}
+          onCompleteLogin={onCompleteLoginMock}
+          method={mockMethod}
+        />
+      );
+
+      expect(wrapper.find('.mfa-totp__code').props().maxLength).toBe(12);
     });
   });
 });

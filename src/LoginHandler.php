@@ -49,6 +49,7 @@ class LoginHandler implements LoginHandlerInterface
 
         return [
             'enabled' => $enabled,
+            'codeLength' => $method->getMethod()->getCodeLength(),
         ];
     }
 

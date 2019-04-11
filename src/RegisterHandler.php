@@ -54,6 +54,7 @@ class RegisterHandler implements RegisterHandlerInterface
             'enabled' => !empty(Environment::getEnv('SS_MFA_SECRET_KEY')),
             'uri' => $totp->getProvisioningUri(),
             'code' => $totp->getSecret(),
+            'codeLength' => Injector::inst()->create(Method::class)->getCodeLength(),
         ];
     }
 

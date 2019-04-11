@@ -2,13 +2,13 @@
 
 namespace SilverStripe\TOTP;
 
+use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Core\Manifest\ModuleLoader;
 use SilverStripe\MFA\Method\Handler\LoginHandlerInterface;
 use SilverStripe\MFA\Method\Handler\RegisterHandlerInterface;
 use SilverStripe\MFA\Method\MethodInterface;
-use SilverStripe\MFA\State\AvailableMethodDetailsInterface;
 use SilverStripe\View\Requirements;
 
 /**
@@ -16,6 +16,16 @@ use SilverStripe\View\Requirements;
  */
 class Method implements MethodInterface
 {
+    use Configurable;
+
+    /**
+     * The TOTP code length
+     *
+     * @config
+     * @var int
+     */
+    private static $code_length = 6;
+
     public function getURLSegment(): string
     {
         return 'totp';
@@ -57,5 +67,15 @@ class Method implements MethodInterface
     public function getUnavailableMessage(): string
     {
         return _t(__CLASS__ . '.NOT_CONFIGURED', 'This method has not been configured yet.');
+    }
+
+    /**
+     * Get the length of the TOTP code
+     *
+     * @return int
+     */
+    public function getCodeLength(): int
+    {
+        return (int) $this->config()->get('code_length');
     }
 }
