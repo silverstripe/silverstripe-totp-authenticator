@@ -11,6 +11,7 @@ use SilverStripe\MFA\Exception\AuthenticationFailedException;
 use SilverStripe\MFA\Method\Handler\RegisterHandlerInterface;
 use SilverStripe\MFA\Service\EncryptionAdapterInterface;
 use SilverStripe\MFA\Store\StoreInterface;
+use SilverStripe\Security\Security;
 use SilverStripe\SiteConfig\SiteConfig;
 
 /**
@@ -47,7 +48,10 @@ class RegisterHandler implements RegisterHandlerInterface
 
         $totp = $this->getTotp($store);
 
-        $totp->setLabel($store->getMember()->Email);
+        $member = $store->getMember() ?: Security::getCurrentUser();
+        if ($member) {
+            $totp->setLabel($member->Email);
+        }
         $totp->setIssuer(SiteConfig::current_site_config()->Title);
 
         return [

@@ -6,6 +6,7 @@ use OTPHP\TOTP;
 use OTPHP\TOTPInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Control\Session;
 use SilverStripe\Core\Environment;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\MFA\Store\SessionStore;
@@ -24,11 +25,6 @@ class RegisterHandlerTest extends SapphireTest
     protected $handler;
 
     /**
-     * @var StoreInterface
-     */
-    protected $store;
-
-    /**
      * @var Member
      */
     protected $member;
@@ -44,12 +40,12 @@ class RegisterHandlerTest extends SapphireTest
         $memberID = $this->logInWithPermission();
         /** @var Member $member */
         $this->member = Member::get()->byID($memberID);
-        $this->store = new SessionStore($this->member);
     }
 
     public function testStart()
     {
-        $result = $this->handler->start($this->store);
+        $store = new SessionStore();
+        $result = $this->handler->start($store);
 
         $this->assertTrue($result['enabled'], 'Method should be enabled');
         $this->assertContains(
@@ -63,7 +59,7 @@ class RegisterHandlerTest extends SapphireTest
             'Provisioning URI should contain user email'
         );
         $this->assertNotEmpty(
-            $this->store->getState()['secret'],
+            $store->getState()['secret'],
             'TOTP secret should be saved to StoreInterface'
         );
     }
@@ -75,14 +71,19 @@ class RegisterHandlerTest extends SapphireTest
     public function testRegisterWithInvalidCode()
     {
         $request = new HTTPRequest('GET', '/', [], [], json_encode(['code' => '123456']));
-        $this->store->setState(['secret' => base64_encode('willneverw0rk')]);
-        $this->handler->register($request, $this->store);
+        $request->setSession(new Session([]));
+        $store = new SessionStore($request);
+        $store->setState(['secret' => base64_encode('willneverw0rk')]);
+
+        $this->handler->register($request, $store);
     }
 
     public function testRegisterReturnsEncryptedSecret()
     {
         $request = new HTTPRequest('GET', '/', [], [], json_encode(['code' => '123456']));
-        $this->store->setState(['secret' => 'opensesame']);
+        $request->setSession(new Session([]));
+        $store = new SessionStore($request);
+        $store->setState(['secret' => 'opensesame']);
 
         /** @var RegisterHandler|PHPUnit_Framework_MockObject_MockObject $handler */
         $handler = $this->getMockBuilder(RegisterHandler::class)
@@ -94,7 +95,7 @@ class RegisterHandlerTest extends SapphireTest
         );
         $totpMock->expects($this->once())->method('verify')->with('123456')->willReturn(true);
 
-        $result = $handler->register($request, $this->store);
+        $result = $handler->register($request, $store);
         $this->assertNotEmpty($result['secret']);
         $this->assertNotContains(
             'opensesame',
