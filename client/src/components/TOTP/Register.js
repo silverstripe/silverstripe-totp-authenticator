@@ -25,6 +25,7 @@ class Register extends Component {
     };
 
     this.handleBack = this.handleBack.bind(this);
+    this.handleBackToScan = this.handleBackToScan.bind(this);
     this.handleNext = this.handleNext.bind(this);
   }
 
@@ -33,6 +34,16 @@ class Register extends Component {
    */
   handleBack() {
     this.props.onBack();
+  }
+
+  /**
+   * Send the user back to the "scan QR code" screen
+   */
+  handleBackToScan() {
+    this.setState({
+      view: VIEWS.SCAN,
+      error: null,
+    });
   }
 
   /**
@@ -153,7 +164,7 @@ class Register extends Component {
       <button
         type="button"
         className="mfa-actions__action mfa-actions__action--back btn"
-        onClick={() => this.setState({ view: VIEWS.SCAN, error: null })}
+        onClick={this.handleBackToScan}
       >
         { i18n._t('TOTPRegister.BACK', 'Back') }
       </button>

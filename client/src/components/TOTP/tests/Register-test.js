@@ -50,6 +50,27 @@ describe('Register', () => {
     });
   });
 
+
+  describe('handleBackToScan()', () => {
+    it('clears errors when clicking on the back button', () => {
+      const wrapper = shallow(
+        <Register
+          onBack={onBackMock}
+          onCompleteRegistration={onCompleteRegistrationMock}
+          method={mockMethod}
+          code="FOO123"
+          uri="example"
+          TOTPLoginComponent={TOTPLoginComponent}
+        />
+      );
+
+      wrapper.setState({ error: 'Something went wrong' });
+      wrapper.instance().handleBackToScan();
+      expect(wrapper.instance().state.view).toBe('SCAN_CODE');
+      expect(wrapper.instance().state.error).toBeNull();
+    });
+  });
+
   describe('renderActionsMenu()', () => {
     it('renders a "Next" and "Back" button', () => {
       const wrapper = shallow(
