@@ -20,10 +20,12 @@ class Register extends Component {
     super(props);
 
     this.state = {
-      view: VIEWS.SCAN,
+      error: props.error,
+      view: props.error ? VIEWS.VALIDATE : VIEWS.SCAN,
     };
 
     this.handleBack = this.handleBack.bind(this);
+    this.handleBackToScan = this.handleBackToScan.bind(this);
     this.handleNext = this.handleNext.bind(this);
   }
 
@@ -32,6 +34,16 @@ class Register extends Component {
    */
   handleBack() {
     this.props.onBack();
+  }
+
+  /**
+   * Send the user back to the "scan QR code" screen
+   */
+  handleBackToScan() {
+    this.setState({
+      view: VIEWS.SCAN,
+      error: null,
+    });
   }
 
   /**
@@ -152,7 +164,7 @@ class Register extends Component {
       <button
         type="button"
         className="mfa-actions__action mfa-actions__action--back btn"
-        onClick={() => this.setState({ view: VIEWS.SCAN })}
+        onClick={this.handleBackToScan}
       >
         { i18n._t('TOTPRegister.BACK', 'Back') }
       </button>
@@ -166,7 +178,7 @@ class Register extends Component {
    * @returns {HTMLElement}
    */
   renderValidateCodeScreen() {
-    const { view } = this.state;
+    const { error, view } = this.state;
     const { TOTPLoginComponent, onCompleteRegistration } = this.props;
 
     if (view !== VIEWS.VALIDATE) {
@@ -175,6 +187,8 @@ class Register extends Component {
 
     const loginProps = {
       ...this.props,
+      // Override the error prop to come from the state instead of props
+      error,
       moreOptionsControl: this.renderBackButtonForLogin(),
       // Renaming registration callback so it fits in the Login context
       onCompleteLogin: onCompleteRegistration,
