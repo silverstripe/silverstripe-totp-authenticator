@@ -3,8 +3,10 @@
 namespace SilverStripe\TOTP;
 
 use Exception;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\MFA\Exception\AuthenticationFailedException;
 use SilverStripe\MFA\Method\Handler\LoginHandlerInterface;
@@ -17,14 +19,27 @@ use SilverStripe\MFA\Store\StoreInterface;
  */
 class LoginHandler implements LoginHandlerInterface
 {
+    use Injectable;
     use TOTPAware;
+
+    /**
+     * @var string[]
+     */
+    private static $dependencies = [
+        'Logger' => '%$' . LoggerInterface::class . '.mfa',
+    ];
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     public function start(StoreInterface $store, RegisteredMethod $method): array
     {
         try {
-            $data = json_decode($method->Data, true);
+            $data = json_decode((string) $method->Data, true);
             if (!$data || !isset($data['secret'])) {
-                throw new RuntimeException('TOTP secret is not available in the StoreInterface');
+                throw new RuntimeException('TOTP secret is not available in the registered method data');
             }
 
             $key = $this->getEncryptionKey();
@@ -45,6 +60,8 @@ class LoginHandler implements LoginHandlerInterface
         } catch (Exception $ex) {
             // noop: encryption may not be defined, so method should be disabled rather than application error
             $enabled = false;
+
+            $this->getLogger()->debug($ex->getMessage(), $ex->getTrace());
         }
 
         return [
@@ -67,5 +84,23 @@ class LoginHandler implements LoginHandlerInterface
     public function getComponent(): string
     {
         return 'TOTPLogin';
+    }
+
+    /**
+     * @return LoggerInterface
+     */
+    public function getLogger(): ?LoggerInterface
+    {
+        return $this->logger;
+    }
+
+    /**
+     * @param LoggerInterface $logger
+     * @return LoginHandler
+     */
+    public function setLogger(LoggerInterface $logger): LoginHandler
+    {
+        $this->logger = $logger;
+        return $this;
     }
 }

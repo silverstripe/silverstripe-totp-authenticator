@@ -4,6 +4,7 @@ namespace SilverStripe\TOTP\Tests;
 
 use OTPHP\TOTPInterface;
 use PHPUnit_Framework_MockObject_MockObject;
+use Psr\Log\LoggerInterface;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\Session;
 use SilverStripe\Core\Environment;
@@ -49,7 +50,7 @@ class LoginHandlerTest extends SapphireTest
         $this->request = new HTTPRequest('GET', '/');
         $this->request->setSession(new Session([]));
         $this->store = new SessionStore($this->request);
-        $this->handler = new LoginHandler();
+        $this->handler = LoginHandler::create();
 
         // Mock environment variable for encryption key
         Environment::setEnv('SS_MFA_SECRET_KEY', 'foobar123');
@@ -110,5 +111,17 @@ class LoginHandlerTest extends SapphireTest
 
         $result = $handler->verify($this->request, $this->store, $this->member->RegisteredMFAMethods()->first());
         $this->assertTrue($result, 'Mocked TOTP verification with the right argument should return true');
+    }
+
+    public function testExceptionsOnStartMethodAreLogged()
+    {
+        Environment::setEnv('SS_MFA_SECRET_KEY', null);
+
+        /** @var LoggerInterface|PHPUnit_Framework_MockObject_MockObject $logger */
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects($this->once())->method('debug');
+
+        $this->handler->setLogger($logger);
+        $this->handler->start($this->store, $this->member->RegisteredMFAMethods()->first());
     }
 }
