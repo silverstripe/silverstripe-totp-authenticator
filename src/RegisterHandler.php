@@ -109,7 +109,7 @@ class RegisterHandler implements RegisterHandlerInterface
 
     public function getName(): string
     {
-        return _t(__CLASS__ . '.NAME', 'Setup via authenticator app');
+        return _t(__CLASS__ . '.NAME', 'Authenticator app');
     }
 
     public function getDescription(): string
