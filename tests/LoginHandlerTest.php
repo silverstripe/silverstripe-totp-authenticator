@@ -49,7 +49,6 @@ class LoginHandlerTest extends SapphireTest
 
         $this->request = new HTTPRequest('GET', '/');
         $this->request->setSession(new Session([]));
-        $this->store = new SessionStore($this->request);
         $this->handler = LoginHandler::create();
 
         // Mock environment variable for encryption key
@@ -69,6 +68,8 @@ class LoginHandlerTest extends SapphireTest
         $memberID = $this->logInWithPermission();
         $this->member = Member::get()->byID($memberID);
         $this->member->RegisteredMFAMethods()->add($registeredMethod);
+
+        $this->store = new SessionStore($this->member);
     }
 
     public function testStartWithNoSecret()
@@ -110,7 +111,10 @@ class LoginHandlerTest extends SapphireTest
         $totp->expects($this->once())->method('verify')->with('135246')->willReturn(true);
 
         $result = $handler->verify($this->request, $this->store, $this->member->RegisteredMFAMethods()->first());
-        $this->assertTrue($result, 'Mocked TOTP verification with the right argument should return true');
+        $this->assertTrue(
+            $result->isSuccessful(),
+            'Mocked TOTP verification with the right argument should return successful result'
+        );
     }
 
     public function testExceptionsOnStartMethodAreLogged()
