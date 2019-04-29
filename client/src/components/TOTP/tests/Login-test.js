@@ -182,7 +182,7 @@ describe('Login', () => {
         />
       );
 
-      expect(wrapper.text()).toContain('Invalid code');
+      expect(wrapper.text()).toContain('Something went wrong');
     });
 
     it('renders the method thumbnail', () => {

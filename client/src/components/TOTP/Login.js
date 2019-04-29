@@ -159,9 +159,7 @@ class Login extends Component {
             onChange={this.handleChangeCode}
             onKeyUp={this.handleInputKeyUp}
           />
-          {error && <div className="help-block">
-            {i18n._t('TOTPLogin.ERROR', 'Invalid code')}
-          </div>}
+          {error && <div className="help-block">{error}</div>}
         </div>
 
         {method.thumbnail && (
