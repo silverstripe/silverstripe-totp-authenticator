@@ -44,7 +44,7 @@ class RegisterHandlerTest extends SapphireTest
 
     public function testStart()
     {
-        $store = new SessionStore();
+        $store = new SessionStore($this->member);
         $result = $this->handler->start($store);
 
         $this->assertTrue($result['enabled'], 'Method should be enabled');
@@ -64,25 +64,27 @@ class RegisterHandlerTest extends SapphireTest
         );
     }
 
-    /**
-     * @expectedException \SilverStripe\MFA\Exception\AuthenticationFailedException
-     * @expectedExceptionMessage Provided code was not valid.
-     */
     public function testRegisterWithInvalidCode()
     {
         $request = new HTTPRequest('GET', '/', [], [], json_encode(['code' => '123456']));
         $request->setSession(new Session([]));
-        $store = new SessionStore($request);
+        $store = new SessionStore($this->member);
         $store->setState(['secret' => base64_encode('willneverw0rk')]);
 
-        $this->handler->register($request, $store);
+        $result = $this->handler->register($request, $store);
+        $this->assertFalse($result->isSuccessful());
+        $this->assertSame(
+            'Provided code was not valid',
+            $result->getMessage(),
+            'Registration failure message is provided'
+        );
     }
 
     public function testRegisterReturnsEncryptedSecret()
     {
         $request = new HTTPRequest('GET', '/', [], [], json_encode(['code' => '123456']));
         $request->setSession(new Session([]));
-        $store = new SessionStore($request);
+        $store = new SessionStore($this->member);
         $store->setState(['secret' => 'opensesame']);
 
         /** @var RegisterHandler|PHPUnit_Framework_MockObject_MockObject $handler */
@@ -96,10 +98,11 @@ class RegisterHandlerTest extends SapphireTest
         $totpMock->expects($this->once())->method('verify')->with('123456')->willReturn(true);
 
         $result = $handler->register($request, $store);
-        $this->assertNotEmpty($result['secret']);
+        $context = $result->getContext();
+        $this->assertNotEmpty($context['secret']);
         $this->assertNotContains(
             'opensesame',
-            $result['secret'],
+            $context['secret'],
             'Encrypted secret should not contain the plain text secret'
         );
     }

@@ -12,6 +12,7 @@ use SilverStripe\MFA\Exception\AuthenticationFailedException;
 use SilverStripe\MFA\Method\Handler\LoginHandlerInterface;
 use SilverStripe\MFA\Model\RegisteredMethod;
 use SilverStripe\MFA\Service\EncryptionAdapterInterface;
+use SilverStripe\MFA\State\Result;
 use SilverStripe\MFA\Store\StoreInterface;
 
 /**
@@ -70,10 +71,10 @@ class LoginHandler implements LoginHandlerInterface
         ];
     }
 
-    public function verify(HTTPRequest $request, StoreInterface $store, RegisteredMethod $registeredMethod): bool
+    public function verify(HTTPRequest $request, StoreInterface $store, RegisteredMethod $registeredMethod): Result
     {
         $data = json_decode($request->getBody(), true);
-        return $this->getTotp($store)->verify($data['code'] ?? '');
+        return Result::create($this->getTotp($store)->verify($data['code'] ?? ''));
     }
 
     public function getLeadInLabel(): string

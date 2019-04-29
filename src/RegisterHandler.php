@@ -10,6 +10,7 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\MFA\Exception\AuthenticationFailedException;
 use SilverStripe\MFA\Method\Handler\RegisterHandlerInterface;
 use SilverStripe\MFA\Service\EncryptionAdapterInterface;
+use SilverStripe\MFA\State\Result;
 use SilverStripe\MFA\Store\StoreInterface;
 use SilverStripe\Security\Security;
 use SilverStripe\SiteConfig\SiteConfig;
@@ -79,15 +80,15 @@ class RegisterHandler implements RegisterHandlerInterface
      *
      * @param HTTPRequest $request
      * @param StoreInterface $store
-     * @return array
+     * @return Result
      * @throws AuthenticationFailedException
      */
-    public function register(HTTPRequest $request, StoreInterface $store): array
+    public function register(HTTPRequest $request, StoreInterface $store): Result
     {
         $data = json_decode($request->getBody(), true);
         $result = $this->getTotp($store)->verify($data['code'] ?? '');
         if (!$result) {
-            throw new AuthenticationFailedException('Provided code was not valid.');
+            return Result::create(false, _t(__CLASS__ . '.INVALID_CODE', 'Provided code was not valid'));
         }
 
         $key = $this->getEncryptionKey();
@@ -103,7 +104,7 @@ class RegisterHandler implements RegisterHandlerInterface
             $key
         );
 
-        return ['secret' => $secret];
+        return Result::create()->setContext(['secret' => $secret]);
     }
 
     public function getName(): string
