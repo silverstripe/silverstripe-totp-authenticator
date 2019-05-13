@@ -1,6 +1,6 @@
 /* global window */
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react';
 import { formatCode } from 'lib/formatCode';
@@ -99,7 +99,7 @@ class Register extends Component {
     const formattedCode = formatCode(code);
 
     return (
-      <Fragment>
+      <div>
         <div className="mfa-totp__scan">
           <p>{ i18n._t(
             'TOTPRegister.INTRO',
@@ -127,7 +127,7 @@ class Register extends Component {
           </div>
         </div>
         { this.renderActionsMenu() }
-      </Fragment>
+      </div>
     );
   }
 
