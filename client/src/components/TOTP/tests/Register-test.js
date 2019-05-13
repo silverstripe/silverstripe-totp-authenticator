@@ -24,7 +24,7 @@ const mockMethod = {
 const onBackMock = jest.fn();
 const onCompleteRegistrationMock = jest.fn();
 
-const TOTPLoginComponent = () => <div />;
+const TOTPVerifyComponent = () => <div />;
 
 describe('Register', () => {
   beforeEach(() => {
@@ -41,7 +41,7 @@ describe('Register', () => {
           method={mockMethod}
           code="FOO123"
           uri="example"
-          TOTPLoginComponent={TOTPLoginComponent}
+          TOTPVerifyComponent={TOTPVerifyComponent}
         />
       );
 
@@ -60,7 +60,7 @@ describe('Register', () => {
           method={mockMethod}
           code="FOO123"
           uri="example"
-          TOTPLoginComponent={TOTPLoginComponent}
+          TOTPVerifyComponent={TOTPVerifyComponent}
         />
       );
 
@@ -80,7 +80,7 @@ describe('Register', () => {
           method={mockMethod}
           code="FOO123"
           uri="example"
-          TOTPLoginComponent={TOTPLoginComponent}
+          TOTPVerifyComponent={TOTPVerifyComponent}
         />
       );
 
@@ -96,7 +96,7 @@ describe('Register', () => {
           method={mockMethod}
           code="FOO123"
           uri="example"
-          TOTPLoginComponent={TOTPLoginComponent}
+          TOTPVerifyComponent={TOTPVerifyComponent}
         />
       );
 
@@ -112,12 +112,12 @@ describe('Register', () => {
           method={mockMethod}
           code="FOO123"
           uri="example"
-          TOTPLoginComponent={TOTPLoginComponent}
+          TOTPVerifyComponent={TOTPVerifyComponent}
         />
       );
 
       wrapper.find('.mfa-actions__action--next').simulate('click');
-      expect(wrapper.find(TOTPLoginComponent)).toHaveLength(1);
+      expect(wrapper.find(TOTPVerifyComponent)).toHaveLength(1);
     });
   });
 
@@ -130,7 +130,7 @@ describe('Register', () => {
           method={mockMethod}
           code="FOO123"
           uri="example"
-          TOTPLoginComponent={TOTPLoginComponent}
+          TOTPVerifyComponent={TOTPVerifyComponent}
         />
       );
 
@@ -150,7 +150,7 @@ describe('Register', () => {
           }}
           code="FOO123"
           uri="example"
-          TOTPLoginComponent={TOTPLoginComponent}
+          TOTPVerifyComponent={TOTPVerifyComponent}
         />
       );
 
@@ -165,7 +165,7 @@ describe('Register', () => {
           method={mockMethod}
           code="FOO123"
           uri="example"
-          TOTPLoginComponent={TOTPLoginComponent}
+          TOTPVerifyComponent={TOTPVerifyComponent}
         />
       );
 

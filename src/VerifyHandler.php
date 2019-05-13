@@ -9,16 +9,16 @@ use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\MFA\Exception\AuthenticationFailedException;
-use SilverStripe\MFA\Method\Handler\LoginHandlerInterface;
+use SilverStripe\MFA\Method\Handler\VerifyHandlerInterface;
 use SilverStripe\MFA\Model\RegisteredMethod;
 use SilverStripe\MFA\Service\EncryptionAdapterInterface;
 use SilverStripe\MFA\State\Result;
 use SilverStripe\MFA\Store\StoreInterface;
 
 /**
- * Handles login requests using a time-based one-time password (TOTP) with the silverstripe/mfa module.
+ * Handles verification requests using a time-based one-time password (TOTP) with the silverstripe/mfa module.
  */
-class LoginHandler implements LoginHandlerInterface
+class VerifyHandler implements VerifyHandlerInterface
 {
     use Injectable;
     use TOTPAware;
@@ -87,7 +87,7 @@ class LoginHandler implements LoginHandlerInterface
 
     public function getComponent(): string
     {
-        return 'TOTPLogin';
+        return 'TOTPVerify';
     }
 
     /**
@@ -100,9 +100,9 @@ class LoginHandler implements LoginHandlerInterface
 
     /**
      * @param LoggerInterface $logger
-     * @return LoginHandler
+     * @return VerifyHandler
      */
-    public function setLogger(LoggerInterface $logger): LoginHandler
+    public function setLogger(LoggerInterface $logger): VerifyHandler
     {
         $this->logger = $logger;
         return $this;

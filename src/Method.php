@@ -6,7 +6,7 @@ use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Core\Manifest\ModuleLoader;
-use SilverStripe\MFA\Method\Handler\LoginHandlerInterface;
+use SilverStripe\MFA\Method\Handler\VerifyHandlerInterface;
 use SilverStripe\MFA\Method\Handler\RegisterHandlerInterface;
 use SilverStripe\MFA\Method\MethodInterface;
 use SilverStripe\View\Requirements;
@@ -31,9 +31,9 @@ class Method implements MethodInterface
         return 'totp';
     }
 
-    public function getLoginHandler(): LoginHandlerInterface
+    public function getVerifyHandler(): VerifyHandlerInterface
     {
-        return Injector::inst()->create(LoginHandler::class);
+        return Injector::inst()->create(VerifyHandler::class);
     }
 
     public function getRegisterHandler(): RegisterHandlerInterface

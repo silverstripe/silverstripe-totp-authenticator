@@ -8,7 +8,7 @@ import classnames from 'classnames';
  * This component provides the user interface for logging in with a one-time time-based password
  * (TOTP) for a user.
  */
-class Login extends Component {
+class Verify extends Component {
   constructor(props) {
     super(props);
 
@@ -55,12 +55,12 @@ class Login extends Component {
   }
 
   /**
-   * Delegate the completion of login/registration to the handler passed in as a prop. The MFA
-   * module will provide this as an API request to the TOTP backend handler's register()
-   * or verify() method.
+   * Delegate the completion of verification/registration to the handler passed in as a prop. The
+   * MFA module will provide this as an API request to the TOTP backend handler's register() or
+   * verify() method.
    */
   handleSubmit() {
-    this.props.onCompleteLogin({ code: this.state.code });
+    this.props.onCompleteVerification({ code: this.state.code });
   }
 
   /**
@@ -93,7 +93,7 @@ class Login extends Component {
           disabled={isNextDisabled}
           onClick={this.handleSubmit}
         >
-          { i18n._t('TOTPLogin.NEXT', 'Next') }
+          { i18n._t('TOTPVerify.NEXT', 'Next') }
         </button>
         { moreOptionsControl }
       </div>
@@ -117,7 +117,7 @@ class Login extends Component {
 
     return (
       <a href={method.supportLink} target="_blank" rel="noopener noreferrer">
-        { i18n._t('TOTPLogin.HOW_TO_USE', 'How to use authenticator app.') }
+        { i18n._t('TOTPVerify.HOW_TO_USE', 'How to use authenticator app.') }
       </a>
     );
   }
@@ -135,14 +135,14 @@ class Login extends Component {
       <div className="mfa-totp__validate-code">
         <div className={formGroupClasses}>
           <p>{ i18n._t(
-            'TOTPLogin.VERIFY',
+            'TOTPVerify.VERIFY',
             'Use verification code from your authenticator app. '
           ) }{ this.renderSupportLink() }</p>
 
           <label htmlFor="totp-code" className="control-label">
             {
               i18n.inject(
-                i18n._t('TOTPLogin.ENTER_CODE', 'Enter {length}-digit code'),
+                i18n._t('TOTPVerify.ENTER_CODE', 'Enter {length}-digit code'),
                 { length: codeLength }
               )
             }
@@ -177,7 +177,7 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="mfa-totp__container mfa-totp__container--login">
+      <div className="mfa-totp__container mfa-totp__container--verify">
         { this.renderVerifyForm() }
         { this.renderActionsMenu() }
       </div>
@@ -185,18 +185,18 @@ class Login extends Component {
   }
 }
 
-Login.propTypes = {
+Verify.propTypes = {
   codeLength: PropTypes.number,
   error: PropTypes.string,
-  onCompleteLogin: PropTypes.func.isRequired,
+  onCompleteVerification: PropTypes.func.isRequired,
   method: PropTypes.object.isRequired,
 };
 
-Login.defaultProps = {
+Verify.defaultProps = {
   codeLength: 6,
   error: null,
 };
 
-Login.displayName = 'TOTPLogin';
+Verify.displayName = 'TOTPVerify';
 
-export default Login;
+export default Verify;

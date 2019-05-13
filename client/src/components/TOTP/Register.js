@@ -47,7 +47,7 @@ class Register extends Component {
   }
 
   /**
-   * After user has scanned the QR code, handle the transition to the login screen
+   * After user has scanned the QR code, handle the transition to the verify screen
    */
   handleNext() {
     this.setState({ view: VIEWS.VALIDATE });
@@ -153,11 +153,11 @@ class Register extends Component {
   }
 
   /**
-   * The back button for the login screen should send you back to the register screen
+   * The back button for the verification screen should send you back to the register screen
    *
    * @return HTMLElement|null
    */
-  renderBackButtonForLogin() {
+  renderBackButtonForVerify() {
     const { ss: { i18n } } = window;
 
     return (
@@ -179,23 +179,23 @@ class Register extends Component {
    */
   renderValidateCodeScreen() {
     const { error, view } = this.state;
-    const { TOTPLoginComponent, onCompleteRegistration } = this.props;
+    const { TOTPVerifyComponent, onCompleteRegistration } = this.props;
 
     if (view !== VIEWS.VALIDATE) {
       return null;
     }
 
-    const loginProps = {
+    const verifyProps = {
       ...this.props,
       // Override the error prop to come from the state instead of props
       error,
-      moreOptionsControl: this.renderBackButtonForLogin(),
-      // Renaming registration callback so it fits in the Login context
-      onCompleteLogin: onCompleteRegistration,
+      moreOptionsControl: this.renderBackButtonForVerify(),
+      // Renaming registration callback so it fits in the Verify context
+      onCompleteVerification: onCompleteRegistration,
       onCompleteRegistration: null,
     };
 
-    return <TOTPLoginComponent {...loginProps} />;
+    return <TOTPVerifyComponent {...verifyProps} />;
   }
 
   render() {
@@ -214,7 +214,7 @@ Register.propTypes = {
   onCompleteRegistration: PropTypes.func.isRequired,
   method: PropTypes.object.isRequired,
   uri: PropTypes.string.isRequired,
-  TOTPLoginComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
+  TOTPVerifyComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
 };
 
 Register.displayName = 'TOTPRegister';
@@ -222,9 +222,9 @@ Register.displayName = 'TOTPRegister';
 export { Register as Component };
 
 export default inject(
-  ['TOTPLogin'],
-  (TOTPLoginComponent) => ({
-    TOTPLoginComponent,
+  ['TOTPVerify'],
+  (TOTPVerifyComponent) => ({
+    TOTPVerifyComponent,
   }),
   () => 'MFA.Register'
 )(Register);
