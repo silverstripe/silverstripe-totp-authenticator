@@ -3,7 +3,7 @@
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import Login from '../Login';
+import Verify from '../Verify';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -17,24 +17,24 @@ window.ss = {
 const mockMethod = {
   urlSegment: 'totp',
   name: 'TOTP',
-  description: 'Login using TOTP',
+  description: 'Verify using TOTP',
   supportLink: 'https://google.com',
-  component: 'TOTPLogin',
+  component: 'TOTPVerify',
   thumbnail: 'totp.svg',
 };
 
-const onCompleteLoginMock = jest.fn();
+const onCompleteVerificationMock = jest.fn();
 
-describe('Login', () => {
+describe('Verify', () => {
   beforeEach(() => {
-    onCompleteLoginMock.mockReset();
+    onCompleteVerificationMock.mockReset();
   });
 
   describe('canSubmit()', () => {
     it('returns false when code is not 6 chars', () => {
       const wrapper = shallow(
-        <Login
-          onCompleteLogin={onCompleteLoginMock}
+        <Verify
+          onCompleteVerification={onCompleteVerificationMock}
           method={mockMethod}
         />
       );
@@ -45,8 +45,8 @@ describe('Login', () => {
 
     it('returns true when code is 6 chars', () => {
       const wrapper = shallow(
-        <Login
-          onCompleteLogin={onCompleteLoginMock}
+        <Verify
+          onCompleteVerification={onCompleteVerificationMock}
           method={mockMethod}
         />
       );
@@ -59,8 +59,8 @@ describe('Login', () => {
   describe('handleChangeCode()', () => {
     it('updates the code in the state', () => {
       const wrapper = shallow(
-        <Login
-          onCompleteLogin={onCompleteLoginMock}
+        <Verify
+          onCompleteVerification={onCompleteVerificationMock}
           method={mockMethod}
         />
       );
@@ -73,52 +73,52 @@ describe('Login', () => {
   describe('handleInputKeyUp()', () => {
     it('treats enter key as a form submission when code is valid', () => {
       const wrapper = shallow(
-        <Login
-          onCompleteLogin={onCompleteLoginMock}
+        <Verify
+          onCompleteVerification={onCompleteVerificationMock}
           method={mockMethod}
         />
       );
 
       wrapper.instance().setState({ code: '123456' });
       wrapper.find('.mfa-totp__code').simulate('keyup', { keyCode: 13 });
-      expect(onCompleteLoginMock.mock.calls).toHaveLength(1);
+      expect(onCompleteVerificationMock.mock.calls).toHaveLength(1);
     });
 
     it('does nothing when code is not valid', () => {
       const wrapper = shallow(
-        <Login
-          onCompleteLogin={onCompleteLoginMock}
+        <Verify
+          onCompleteVerification={onCompleteVerificationMock}
           method={mockMethod}
         />
       );
 
       wrapper.instance().setState({ code: 'ABC' });
       wrapper.find('.mfa-totp__code').simulate('keyup', { keyCode: 13 });
-      expect(onCompleteLoginMock.mock.calls).toHaveLength(0);
+      expect(onCompleteVerificationMock.mock.calls).toHaveLength(0);
     });
   });
 
   describe('handleSubmit()', () => {
-    it('calls the onCompleteLogin prop and passes the code', () => {
+    it('calls the onCompleteVerification prop and passes the code', () => {
       const wrapper = shallow(
-        <Login
-          onCompleteLogin={onCompleteLoginMock}
+        <Verify
+          onCompleteVerification={onCompleteVerificationMock}
           method={mockMethod}
         />
       );
 
       wrapper.instance().handleChangeCode({ target: { value: 'FOO468' } });
       wrapper.instance().handleSubmit();
-      expect(onCompleteLoginMock.mock.calls.length).toBe(1);
-      expect(onCompleteLoginMock.mock.calls[0][0]).toEqual({ code: 'FOO468' });
+      expect(onCompleteVerificationMock.mock.calls.length).toBe(1);
+      expect(onCompleteVerificationMock.mock.calls[0][0]).toEqual({ code: 'FOO468' });
     });
   });
 
   describe('renderActionsMenu()', () => {
     it('disables the "Next" button on code validation unless you have entered 6 characters', () => {
       const wrapper = shallow(
-        <Login
-          onCompleteLogin={onCompleteLoginMock}
+        <Verify
+          onCompleteVerification={onCompleteVerificationMock}
           method={mockMethod}
         />
       );
@@ -137,8 +137,8 @@ describe('Login', () => {
   describe('renderSupportLink()', () => {
     it('renders nothing when no support link is defined in the method', () => {
       const wrapper = shallow(
-        <Login
-          onCompleteLogin={onCompleteLoginMock}
+        <Verify
+          onCompleteVerification={onCompleteVerificationMock}
           method={{
             urlSegment: 'totp',
             name: 'TOTP',
@@ -151,8 +151,8 @@ describe('Login', () => {
 
     it('renders a support link for the provided method on both screens', () => {
       const wrapper = shallow(
-        <Login
-          onCompleteLogin={onCompleteLoginMock}
+        <Verify
+          onCompleteVerification={onCompleteVerificationMock}
           method={mockMethod}
         />
       );
@@ -164,8 +164,8 @@ describe('Login', () => {
   describe('renderVerifyForm()', () => {
     it('renders an input for the code', () => {
       const wrapper = shallow(
-        <Login
-          onCompleteLogin={onCompleteLoginMock}
+        <Verify
+          onCompleteVerification={onCompleteVerificationMock}
           method={mockMethod}
         />
       );
@@ -175,9 +175,9 @@ describe('Login', () => {
 
     it('identifies errors when passed', () => {
       const wrapper = shallow(
-        <Login
+        <Verify
           error="Something went wrong"
-          onCompleteLogin={onCompleteLoginMock}
+          onCompleteVerification={onCompleteVerificationMock}
           method={mockMethod}
         />
       );
@@ -187,8 +187,8 @@ describe('Login', () => {
 
     it('renders the method thumbnail', () => {
       const wrapper = shallow(
-        <Login
-          onCompleteLogin={onCompleteLoginMock}
+        <Verify
+          onCompleteVerification={onCompleteVerificationMock}
           method={mockMethod}
         />
       );
@@ -198,8 +198,8 @@ describe('Login', () => {
 
     it('defaults to a 6 character code length', () => {
       const wrapper = shallow(
-        <Login
-          onCompleteLogin={onCompleteLoginMock}
+        <Verify
+          onCompleteVerification={onCompleteVerificationMock}
           method={mockMethod}
         />
       );
@@ -209,9 +209,9 @@ describe('Login', () => {
 
     it('allows the code length to be configured', () => {
       const wrapper = shallow(
-        <Login
+        <Verify
           codeLength={12}
-          onCompleteLogin={onCompleteLoginMock}
+          onCompleteVerification={onCompleteVerificationMock}
           method={mockMethod}
         />
       );

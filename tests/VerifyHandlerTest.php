@@ -16,10 +16,10 @@ use SilverStripe\MFA\Service\EncryptionAdapterInterface;
 use SilverStripe\MFA\Store\SessionStore;
 use SilverStripe\MFA\Store\StoreInterface;
 use SilverStripe\Security\Member;
-use SilverStripe\TOTP\LoginHandler;
+use SilverStripe\TOTP\VerifyHandler;
 use SilverStripe\TOTP\Method;
 
-class LoginHandlerTest extends SapphireTest
+class VerifyHandlerTest extends SapphireTest
 {
     protected $usesDatabase = true;
 
@@ -34,7 +34,7 @@ class LoginHandlerTest extends SapphireTest
     protected $store;
 
     /**
-     * @var LoginHandler
+     * @var VerifyHandler
      */
     protected $handler;
 
@@ -49,7 +49,7 @@ class LoginHandlerTest extends SapphireTest
 
         $this->request = new HTTPRequest('GET', '/');
         $this->request->setSession(new Session([]));
-        $this->handler = LoginHandler::create();
+        $this->handler = VerifyHandler::create();
 
         // Mock environment variable for encryption key
         Environment::setEnv('SS_MFA_SECRET_KEY', 'foobar123');
@@ -100,8 +100,8 @@ class LoginHandlerTest extends SapphireTest
     public function testVerify()
     {
         $this->request->setBody(json_encode(['code' => '135246']));
-        /** @var LoginHandler&PHPUnit_Framework_MockObject_MockObject $handler */
-        $handler = $this->getMockBuilder(LoginHandler::class)
+        /** @var VerifyHandler&PHPUnit_Framework_MockObject_MockObject $handler */
+        $handler = $this->getMockBuilder(VerifyHandler::class)
             ->setMethods(['getTotp'])
             ->getMock();
 
