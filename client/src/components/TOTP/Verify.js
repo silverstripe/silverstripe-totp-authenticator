@@ -86,17 +86,23 @@ class Verify extends Component {
     const isNextDisabled = !this.canSubmit();
 
     return (
-      <div className="mfa-actions">
-        <button
-          type="button"
-          className="mfa-actions__action mfa-actions__action--next btn btn-success"
-          disabled={isNextDisabled}
-          onClick={this.handleSubmit}
-        >
-          { i18n._t('TOTPVerify.NEXT', 'Next') }
-        </button>
-        { moreOptionsControl }
-      </div>
+      <ul className="mfa-action-list">
+        <li className="mfa-action-list__item">
+          <button
+            type="button"
+            className="btn btn-success"
+            disabled={isNextDisabled}
+            onClick={this.handleSubmit}
+          >
+            { i18n._t('TOTPVerify.NEXT', 'Next') }
+          </button>
+        </li>
+        {moreOptionsControl && (
+          <li className="mfa-action-list__item">
+            { moreOptionsControl }
+          </li>
+        )}
+      </ul>
     );
   }
 

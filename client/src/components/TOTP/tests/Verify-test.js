@@ -124,13 +124,13 @@ describe('Verify', () => {
       );
 
       wrapper.instance().setState({ code: '' });
-      expect(wrapper.find('.mfa-actions__action--next').props().disabled).toBe(true);
+      expect(wrapper.find('.mfa-action-list .btn').first().props().disabled).toBe(true);
 
       wrapper.instance().setState({ code: 'FOO' });
-      expect(wrapper.find('.mfa-actions__action--next').props().disabled).toBe(true);
+      expect(wrapper.find('.mfa-action-list .btn').first().props().disabled).toBe(true);
 
       wrapper.instance().setState({ code: 'FOO123' });
-      expect(wrapper.find('.mfa-actions__action--next').props().disabled).toBe(false);
+      expect(wrapper.find('.mfa-action-list .btn').first().props().disabled).toBe(false);
     });
   });
 
