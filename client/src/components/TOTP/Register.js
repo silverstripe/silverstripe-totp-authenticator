@@ -63,22 +63,26 @@ class Register extends Component {
     const { ss: { i18n } } = window;
 
     return (
-      <div className="mfa-actions">
-        <button
-          type="button"
-          className="mfa-actions__action mfa-actions__action--next btn btn-success"
-          onClick={this.handleNext}
-        >
-          { i18n._t('TOTPRegister.NEXT', 'Next') }
-        </button>
-        <button
-          type="button"
-          className="mfa-actions__action mfa-actions__action--back btn"
-          onClick={this.handleBack}
-        >
-          { i18n._t('TOTPRegister.BACK', 'Back') }
-        </button>
-      </div>
+      <ul className="mfa-action-list">
+        <li className="mfa-action-list__item">
+          <button
+            type="button"
+            className="btn btn-success"
+            onClick={this.handleNext}
+          >
+            { i18n._t('TOTPRegister.NEXT', 'Next') }
+          </button>
+        </li>
+        <li className="mfa-action-list__item">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={this.handleBack}
+          >
+            { i18n._t('TOTPRegister.BACK', 'Back') }
+          </button>
+        </li>
+      </ul>
     );
   }
 

@@ -84,8 +84,8 @@ describe('Register', () => {
         />
       );
 
-      expect(wrapper.find('.mfa-actions__action--next')).toHaveLength(1);
-      expect(wrapper.find('.mfa-actions__action--back')).toHaveLength(1);
+      expect(wrapper.find('.mfa-action-list .btn').first()).toHaveLength(1);
+      expect(wrapper.find('.mfa-action-list .btn').at(1)).toHaveLength(1);
     });
 
     it('goes back to the previous screen from the initial screen when clicking "Back"', () => {
@@ -100,7 +100,7 @@ describe('Register', () => {
         />
       );
 
-      wrapper.find('.mfa-actions__action--back').simulate('click');
+      wrapper.find('.mfa-action-list .btn').at(1).simulate('click');
       expect(onBackMock.mock.calls.length).toBe(1);
     });
 
@@ -116,7 +116,7 @@ describe('Register', () => {
         />
       );
 
-      wrapper.find('.mfa-actions__action--next').simulate('click');
+      wrapper.find('.mfa-action-list .btn').first().simulate('click');
       expect(wrapper.find(TOTPVerifyComponent)).toHaveLength(1);
     });
   });
