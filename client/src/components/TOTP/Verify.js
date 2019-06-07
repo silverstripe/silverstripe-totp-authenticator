@@ -16,7 +16,11 @@ class Verify extends Component {
       code: '',
     };
 
-    this.codeInput = React.createRef();
+    // Note: deliberately React 15 compatible ref syntax for SS 4.0-4.3 support
+    this.codeInput = null;
+    this.setCodeInput = element => {
+      this.codeInput = element;
+    };
 
     this.handleChangeCode = this.handleChangeCode.bind(this);
     this.handleInputKeyUp = this.handleInputKeyUp.bind(this);
@@ -27,8 +31,8 @@ class Verify extends Component {
    * Automatically set the focus to the code input field when the component is rendered
    */
   componentDidMount() {
-    if (this.codeInput.current) {
-      this.codeInput.current.focus();
+    if (this.codeInput) {
+      this.codeInput.focus();
     }
   }
 
@@ -161,7 +165,7 @@ class Verify extends Component {
             maxLength={codeLength}
             className="mfa-totp__code form-control input-lg"
             value={code}
-            ref={this.codeInput}
+            ref={this.setCodeInput}
             onChange={this.handleChangeCode}
             onKeyUp={this.handleInputKeyUp}
           />
