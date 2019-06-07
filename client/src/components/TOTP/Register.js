@@ -60,6 +60,7 @@ class Register extends Component {
    * @returns {HTMLElement}
    */
   renderActionsMenu() {
+    const { onBack } = this.props;
     const { ss: { i18n } } = window;
 
     return (
@@ -73,15 +74,17 @@ class Register extends Component {
             { i18n._t('TOTPRegister.NEXT', 'Next') }
           </button>
         </li>
-        <li className="mfa-action-list__item">
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={this.handleBack}
-          >
-            { i18n._t('TOTPRegister.BACK', 'Back') }
-          </button>
-        </li>
+        { onBack && (
+          <li className="mfa-action-list__item">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={this.handleBack}
+            >
+              { i18n._t('TOTPRegister.BACK', 'Back') }
+            </button>
+          </li>
+        ) }
       </ul>
     );
   }
@@ -214,7 +217,7 @@ class Register extends Component {
 
 Register.propTypes = {
   code: PropTypes.string.isRequired,
-  onBack: PropTypes.func.isRequired,
+  onBack: PropTypes.func,
   onCompleteRegistration: PropTypes.func.isRequired,
   method: PropTypes.object.isRequired,
   uri: PropTypes.string.isRequired,

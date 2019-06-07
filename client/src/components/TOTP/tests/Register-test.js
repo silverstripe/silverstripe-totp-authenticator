@@ -88,6 +88,22 @@ describe('Register', () => {
       expect(wrapper.find('.mfa-action-list .btn').at(1)).toHaveLength(1);
     });
 
+    it('does not render a back button if no handler is provided', () => {
+      const wrapper = shallow(
+        <Register
+          onBack={null}
+          onCompleteRegistration={onCompleteRegistrationMock}
+          method={mockMethod}
+          code="FOO123"
+          uri="example"
+          TOTPVerifyComponent={TOTPVerifyComponent}
+        />
+      );
+
+      expect(wrapper.find('.mfa-action-list .btn').first()).toHaveLength(1);
+      expect(wrapper.find('.mfa-action-list .btn').at(1)).toHaveLength(0);
+    });
+
     it('goes back to the previous screen from the initial screen when clicking "Back"', () => {
       const wrapper = shallow(
         <Register
