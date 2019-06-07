@@ -167,7 +167,7 @@ class Register extends Component {
     return (
       <button
         type="button"
-        className="mfa-actions__action mfa-actions__action--back btn"
+        className="mfa-actions__action mfa-actions__action--back btn btn-secondary"
         onClick={this.handleBackToScan}
       >
         { i18n._t('TOTPRegister.BACK', 'Back') }
