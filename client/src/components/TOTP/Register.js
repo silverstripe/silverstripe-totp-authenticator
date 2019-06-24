@@ -100,7 +100,7 @@ class Register extends Component {
     }
 
     return (
-      <div className="mfa-totp__errors text-danger">
+      <div className="mfa-totp__errors">
         {errors.join(', ')}
       </div>
     );
