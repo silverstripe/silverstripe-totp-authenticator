@@ -87,16 +87,36 @@ class Register extends Component {
   }
 
   /**
+   * Handles rendering of errors returned from the backend API requests, e.g.
+   * your session has timed out.
+   *
+   * @returns {HTMLElement}
+   */
+  renderErrorScreen() {
+    const { errors } = this.props;
+
+    if (!errors.length) {
+      return null;
+    }
+
+    return (
+      <div className="mfa-totp__errors text-danger">
+        {errors.join(', ')}
+      </div>
+    );
+  }
+
+  /**
    * Renders the screen to scan a QR code with an authenticator app.
    *
    * @returns {HTMLElement}
    */
   renderScanCodeScreen() {
-    const { uri, code } = this.props;
+    const { uri, code, errors } = this.props;
     const { view } = this.state;
     const { ss: { i18n } } = window;
 
-    if (view !== VIEWS.SCAN) {
+    if (view !== VIEWS.SCAN || errors.length) {
       return null;
     }
 
@@ -183,9 +203,9 @@ class Register extends Component {
    */
   renderValidateCodeScreen() {
     const { error, view } = this.state;
-    const { TOTPVerifyComponent, onCompleteRegistration } = this.props;
+    const { TOTPVerifyComponent, onCompleteRegistration, errors } = this.props;
 
-    if (view !== VIEWS.VALIDATE) {
+    if (view !== VIEWS.VALIDATE || errors.length) {
       return null;
     }
 
@@ -205,6 +225,7 @@ class Register extends Component {
   render() {
     return (
       <div className="mfa-totp__container mfa-totp__container--register">
+        { this.renderErrorScreen() }
         { this.renderScanCodeScreen() }
         { this.renderValidateCodeScreen() }
       </div>
@@ -216,9 +237,15 @@ Register.propTypes = {
   code: PropTypes.string.isRequired,
   onBack: PropTypes.func.isRequired,
   onCompleteRegistration: PropTypes.func.isRequired,
+  errors: PropTypes.arrayOf(PropTypes.string),
   method: PropTypes.object.isRequired,
   uri: PropTypes.string.isRequired,
   TOTPVerifyComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
+};
+
+Register.defaultProps = {
+  code: '',
+  errors: [],
 };
 
 Register.displayName = 'TOTPRegister';
