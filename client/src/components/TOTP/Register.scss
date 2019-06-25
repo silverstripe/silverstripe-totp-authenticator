@@ -1,6 +1,7 @@
 $totp-img-height: 200px;
 $scan-qr-height: 160px;
 $scan-qr-manual-border-color: #cccccc;
+$color-status-bad: rgba(169, 30, 46, 1); // $color-message-error from mfa module
 $viewport-small: 480px;
 
 .mfa-totp {
@@ -9,6 +10,10 @@ $viewport-small: 480px;
     font-size: 2rem;
     letter-spacing: 1rem;
     width: 80%;
+  }
+
+  &__errors {
+    color: $color-status-bad;
   }
 
   &__validate-code {

@@ -50,6 +50,24 @@ describe('Register', () => {
     });
   });
 
+  describe('renderErrorScreen()', () => {
+    it('renders the provided errors', () => {
+      const wrapper = shallow(
+        <Register
+          onBack={onBackMock}
+          onCompleteRegistration={onCompleteRegistrationMock}
+          method={mockMethod}
+          code="FOO123"
+          uri="example"
+          errors={['Something went wrong', 'I am a unit test']}
+          TOTPVerifyComponent={TOTPVerifyComponent}
+        />
+      );
+
+      expect(wrapper.text()).toContain('Something went wrong');
+      expect(wrapper.text()).toContain('I am a unit test');
+    });
+  });
 
   describe('handleBackToScan()', () => {
     it('clears errors when clicking on the back button', () => {
