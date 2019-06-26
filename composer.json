@@ -14,8 +14,8 @@
     "license": "BSD-3-Clause",
     "require": {
         "php": ">=7.1.0",
-        "silverstripe/mfa": "^4.0",
-        "silverstripe/siteconfig": "^4.0",
+        "silverstripe/mfa": "^3.0",
+        "silverstripe/siteconfig": "^3.0",
         "spomky-labs/otphp": "^9.1",
         "paragonie/constant_time_encoding": "^2.0"
     },
@@ -30,9 +30,6 @@
         }
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.x-dev"
-        },
         "expose": [
             "client/dist"
         ]
