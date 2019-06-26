@@ -67,7 +67,7 @@ class Register extends Component {
         <li className="mfa-action-list__item">
           <button
             type="button"
-            className="btn btn-success"
+            className="btn btn-primary"
             onClick={this.handleNext}
           >
             { i18n._t('TOTPRegister.NEXT', 'Next') }

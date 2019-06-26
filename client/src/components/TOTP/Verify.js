@@ -94,7 +94,7 @@ class Verify extends Component {
         <li className="mfa-action-list__item">
           <button
             type="button"
-            className="btn btn-success"
+            className="btn btn-primary"
             disabled={isNextDisabled}
             onClick={this.handleSubmit}
           >
