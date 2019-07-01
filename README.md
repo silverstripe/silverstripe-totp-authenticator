@@ -5,7 +5,7 @@
 [![codecov](https://codecov.io/gh/silverstripe/silverstripe-totp-authenticator/branch/master/graph/badge.svg)](https://codecov.io/gh/silverstripe/silverstripe-totp-authenticator)
 [![SilverStripe supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
 
-Log in to SilverStripe with an authenticator app on your phone as a second factor, using a time-based one-time
+Log in to SilverStripe with an authenticator app on your phone as a secondary factor, using a time-based one-time
 password (TOTP).
 
 This module provides a TOTP authenticator that plugs in to the [silverstripe/mfa](https://github.com/silverstripe/mfa)
