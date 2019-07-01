@@ -127,7 +127,7 @@ class Register extends Component {
         <div className="mfa-totp__scan">
           <p>{ i18n._t(
             'TOTPRegister.INTRO',
-            'Use an authentication app such as Google Authenticator to scan the following code. '
+            'Verification codes are created by an app on your phone. '
           ) }{ this.renderSupportLink() }</p>
 
           <div className="mfa-totp__scan-code">
