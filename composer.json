@@ -1,7 +1,7 @@
 {
     "name": "silverstripe/totp-authenticator",
     "description": "A TOTP authenticator for use with silverstripe/mfa",
-    "type": "silverstripe-vendormodule",
+    "type": "silverstripe-module",
     "keywords": [
         "silverstripe",
         "CMS",
