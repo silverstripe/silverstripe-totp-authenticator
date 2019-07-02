@@ -125,6 +125,11 @@ class RegisterHandler implements RegisterHandlerInterface
         return (string) $this->config()->get('user_help_link');
     }
 
+    public function getSupportText(): string
+    {
+        return _t(__CLASS__ . '.SUPPORT_LINK_DESCRIPTION', 'How to use authenticator apps.');
+    }
+
     public function getComponent(): string
     {
         return 'TOTPRegister';
