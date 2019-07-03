@@ -5,7 +5,6 @@ namespace SilverStripe\TOTP;
 use OTPHP\TOTP;
 use OTPHP\TOTPInterface;
 use RuntimeException;
-use SilverStripe\Core\Environment;
 use SilverStripe\MFA\Store\StoreInterface;
 
 trait TOTPAware
@@ -18,7 +17,7 @@ trait TOTPAware
      */
     protected function getEncryptionKey(): string
     {
-        return (string) Environment::getEnv('SS_MFA_SECRET_KEY');
+        return (string) getenv('SS_MFA_SECRET_KEY');
     }
 
     /**

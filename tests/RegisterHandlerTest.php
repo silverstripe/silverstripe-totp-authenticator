@@ -2,18 +2,16 @@
 
 namespace SilverStripe\TOTP\Tests;
 
+use Member;
 use OTPHP\TOTP;
 use OTPHP\TOTPInterface;
 use PHPUnit_Framework_MockObject_MockObject;
-use SilverStripe\Control\HTTPRequest;
-use SilverStripe\Control\Session;
-use SilverStripe\Core\Environment;
-use SilverStripe\Dev\SapphireTest;
+use SapphireTest;
 use SilverStripe\MFA\Store\SessionStore;
 use SilverStripe\MFA\Store\StoreInterface;
-use SilverStripe\Security\Member;
-use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\TOTP\RegisterHandler;
+use SiteConfig;
+use SS_HTTPRequest;
 
 class RegisterHandlerTest extends SapphireTest
 {
@@ -29,13 +27,13 @@ class RegisterHandlerTest extends SapphireTest
      */
     protected $member;
 
-    protected function setUp()
+    public function setUp()
     {
         parent::setUp();
 
         $this->handler = new RegisterHandler();
 
-        Environment::setEnv('SS_MFA_SECRET_KEY', 'foo123');
+        putenv('SS_MFA_SECRET_KEY=foo123');
 
         $memberID = $this->logInWithPermission();
         /** @var Member $member */
@@ -66,8 +64,7 @@ class RegisterHandlerTest extends SapphireTest
 
     public function testRegisterWithInvalidCode()
     {
-        $request = new HTTPRequest('GET', '/', [], [], json_encode(['code' => '123456']));
-        $request->setSession(new Session([]));
+        $request = new SS_HTTPRequest('GET', '/', [], [], json_encode(['code' => '123456']));
         $store = new SessionStore($this->member);
         $store->setState(['secret' => base64_encode('willneverw0rk')]);
 
@@ -82,8 +79,7 @@ class RegisterHandlerTest extends SapphireTest
 
     public function testRegisterReturnsEncryptedSecret()
     {
-        $request = new HTTPRequest('GET', '/', [], [], json_encode(['code' => '123456']));
-        $request->setSession(new Session([]));
+        $request = new SS_HTTPRequest('GET', '/', [], [], json_encode(['code' => '123456']));
         $store = new SessionStore($this->member);
         $store->setState(['secret' => 'opensesame']);
 

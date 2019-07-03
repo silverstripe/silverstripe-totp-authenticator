@@ -2,22 +2,19 @@
 
 namespace SilverStripe\TOTP;
 
-use SilverStripe\Core\Config\Configurable;
-use SilverStripe\Core\Environment;
-use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Core\Manifest\ModuleLoader;
-use SilverStripe\MFA\Method\Handler\VerifyHandlerInterface;
+use Director;
+use Injector;
+use Requirements;
 use SilverStripe\MFA\Method\Handler\RegisterHandlerInterface;
+use SilverStripe\MFA\Method\Handler\VerifyHandlerInterface;
 use SilverStripe\MFA\Method\MethodInterface;
-use SilverStripe\View\Requirements;
+use SS_Object;
 
 /**
  * Enables time-based one-time password (TOTP) authentication for the silverstripe/mfa module.
  */
-class Method implements MethodInterface
+class Method extends SS_Object implements MethodInterface
 {
-    use Configurable;
-
     /**
      * The TOTP code length
      *
@@ -43,15 +40,15 @@ class Method implements MethodInterface
 
     public function getThumbnail(): string
     {
-        return ModuleLoader::getModule('silverstripe/totp-authenticator')
-            ->getResource('client/dist/images/totp.svg')
-            ->getURL();
+        $module = $this->getModuleName();
+        return "/$module/client/dist/images/totp.svg";
     }
 
     public function applyRequirements(): void
     {
-        Requirements::javascript('silverstripe/totp-authenticator: client/dist/js/bundle.js');
-        Requirements::css('silverstripe/totp-authenticator: client/dist/styles/bundle.css');
+        $module = $this->getModuleName();
+        Requirements::javascript("$module/client/dist/js/bundle.js");
+        Requirements::css("$module/client/dist/styles/bundle.css");
     }
 
     /**
@@ -61,7 +58,7 @@ class Method implements MethodInterface
      */
     public function isAvailable(): bool
     {
-        return !empty(Environment::getEnv('SS_MFA_SECRET_KEY'));
+        return !empty(getenv('SS_MFA_SECRET_KEY'));
     }
 
     public function getUnavailableMessage(): string
@@ -77,5 +74,17 @@ class Method implements MethodInterface
     public function getCodeLength(): int
     {
         return (int) $this->config()->get('code_length');
+    }
+
+    /**
+     * Get directory name this module is installed into
+     * SS3 is not specific or caring about what the module is named, only that it exists and is a valid SilverStripe
+     * mdoule.
+     *
+     * @return string
+     */
+    private function getModuleName(): string
+    {
+        return basename(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..'));
     }
 }

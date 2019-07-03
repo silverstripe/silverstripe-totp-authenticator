@@ -2,29 +2,32 @@
 
 namespace SilverStripe\TOTP\Tests;
 
+// phpcs:disable
+require_once 'Zend/Log/Writer/Null.php';
+// phpcs:enable
+
+use Injector;
+use Member;
+use MFARegisteredMethod as RegisteredMethod;
 use OTPHP\TOTPInterface;
 use PHPUnit_Framework_MockObject_MockObject;
-use Psr\Log\LoggerInterface;
-use SilverStripe\Control\HTTPRequest;
-use SilverStripe\Control\Session;
-use SilverStripe\Core\Environment;
-use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Dev\SapphireTest;
+use SapphireTest;
 use SilverStripe\MFA\Extension\MemberExtension;
-use SilverStripe\MFA\Model\RegisteredMethod;
 use SilverStripe\MFA\Service\EncryptionAdapterInterface;
 use SilverStripe\MFA\Store\SessionStore;
 use SilverStripe\MFA\Store\StoreInterface;
-use SilverStripe\Security\Member;
-use SilverStripe\TOTP\VerifyHandler;
 use SilverStripe\TOTP\Method;
+use SilverStripe\TOTP\VerifyHandler;
+use SS_HTTPRequest;
+use SS_Log;
+use Zend_Log_Writer_Null;
 
 class VerifyHandlerTest extends SapphireTest
 {
     protected $usesDatabase = true;
 
     /**
-     * @var HTTPRequest
+     * @var SS_HTTPRequest
      */
     protected $request;
 
@@ -43,16 +46,15 @@ class VerifyHandlerTest extends SapphireTest
      */
     protected $member;
 
-    protected function setUp()
+    public function setUp()
     {
         parent::setUp();
 
-        $this->request = new HTTPRequest('GET', '/');
-        $this->request->setSession(new Session([]));
+        $this->request = new SS_HTTPRequest('GET', '/');
         $this->handler = VerifyHandler::create();
 
         // Mock environment variable for encryption key
-        Environment::setEnv('SS_MFA_SECRET_KEY', 'foobar123');
+        putenv('SS_MFA_SECRET_KEY=foobar123');
 
         // Mock the encryption adapter to return the plaintext input
         $encryptionAdapter = $this->createMock(EncryptionAdapterInterface::class);
@@ -84,7 +86,7 @@ class VerifyHandlerTest extends SapphireTest
 
     public function testStartWithNoEncryptionKey()
     {
-        Environment::setEnv('SS_MFA_SECRET_KEY', '');
+        putenv('SS_MFA_SECRET_KEY=');
         $result = $this->handler->start($this->store, $this->member->RegisteredMFAMethods()->first());
         $this->assertFalse($result['enabled']);
     }
@@ -119,13 +121,21 @@ class VerifyHandlerTest extends SapphireTest
 
     public function testExceptionsOnStartMethodAreLogged()
     {
-        Environment::setEnv('SS_MFA_SECRET_KEY', null);
+        putenv('SS_MFA_SECRET_KEY=');
 
-        /** @var LoggerInterface|PHPUnit_Framework_MockObject_MockObject $logger */
-        $logger = $this->createMock(LoggerInterface::class);
-        $logger->expects($this->once())->method('debug');
+        /** @var Zend_Log_Writer_Null|PHPUnit_Framework_MockObject_MockObject $logger */
+        $logger = $this->createMock(Zend_Log_Writer_Null::class);
+        $logger->expects($this->once())->method('write');
 
-        $this->handler->setLogger($logger);
+        $originalWriters = SS_Log::get_writers();
+        SS_Log::clear_writers();
+        SS_Log::add_writer($logger);
+
         $this->handler->start($this->store, $this->member->RegisteredMFAMethods()->first());
+
+        SS_Log::remove_writer($logger);
+        foreach ($originalWriters as $writer) {
+            SS_Log::add_writer($writer);
+        }
     }
 }
