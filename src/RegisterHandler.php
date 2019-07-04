@@ -107,11 +107,6 @@ class RegisterHandler implements RegisterHandlerInterface
         return Result::create()->setContext(['secret' => $secret]);
     }
 
-    public function getName(): string
-    {
-        return _t(__CLASS__ . '.NAME', 'Authenticator app');
-    }
-
     public function getDescription(): string
     {
         return _t(
