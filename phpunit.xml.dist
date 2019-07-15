@@ -1,4 +1,4 @@
-<phpunit bootstrap="vendor/silverstripe/cms/tests/bootstrap.php" colors="true">
+<phpunit bootstrap="framework/tests/bootstrap.php" colors="true">
     <testsuite name="mfa">
         <directory>tests/</directory>
     </testsuite>

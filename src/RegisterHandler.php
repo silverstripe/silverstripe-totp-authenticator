@@ -2,25 +2,23 @@
 
 namespace SilverStripe\TOTP;
 
+use Injector;
 use ParagonIE\ConstantTime\Base32;
-use SilverStripe\Control\HTTPRequest;
-use SilverStripe\Core\Config\Configurable;
-use SilverStripe\Core\Environment;
-use SilverStripe\Core\Injector\Injector;
+use Security;
 use SilverStripe\MFA\Exception\AuthenticationFailedException;
 use SilverStripe\MFA\Method\Handler\RegisterHandlerInterface;
 use SilverStripe\MFA\Service\EncryptionAdapterInterface;
 use SilverStripe\MFA\State\Result;
 use SilverStripe\MFA\Store\StoreInterface;
-use SilverStripe\Security\Security;
-use SilverStripe\SiteConfig\SiteConfig;
+use SiteConfig;
+use SS_HTTPRequest;
+use SS_Object;
 
 /**
  * Handles registration requests using a time-based one-time password (TOTP) with the silverstripe/mfa module.
  */
-class RegisterHandler implements RegisterHandlerInterface
+class RegisterHandler extends SS_Object implements RegisterHandlerInterface
 {
-    use Configurable;
     use TOTPAware;
 
     /**
@@ -56,7 +54,7 @@ class RegisterHandler implements RegisterHandlerInterface
         $totp->setIssuer(SiteConfig::current_site_config()->Title);
 
         return [
-            'enabled' => !empty(Environment::getEnv('SS_MFA_SECRET_KEY')),
+            'enabled' => !empty(getenv('SS_MFA_SECRET_KEY')),
             'uri' => $totp->getProvisioningUri(),
             'code' => $totp->getSecret(),
             'codeLength' => Injector::inst()->create(Method::class)->getCodeLength(),
@@ -78,12 +76,12 @@ class RegisterHandler implements RegisterHandlerInterface
      * Validate the provided TOTP code and return the TOTP secret to be stored against the RegisteredMethod model.
      * Will throw an exception if the code is invalid.
      *
-     * @param HTTPRequest $request
+     * @param SS_HTTPRequest $request
      * @param StoreInterface $store
      * @return Result
      * @throws AuthenticationFailedException
      */
-    public function register(HTTPRequest $request, StoreInterface $store): Result
+    public function register(SS_HTTPRequest $request, StoreInterface $store): Result
     {
         $data = json_decode($request->getBody(), true);
         $result = $this->getTotp($store)->verify($data['code'] ?? '');

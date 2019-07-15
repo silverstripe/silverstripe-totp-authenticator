@@ -16,8 +16,8 @@ For more information about TOTP, see [RFC 6238](https://tools.ietf.org/html/rfc6
 ## Requirements
 
 * PHP ^7.1
-* SilverStripe ^4.1
-* silverstripe/mfa: ^4.0
+* SilverStripe ^3.7
+* silverstripe/mfa: ^3.0
 * spomky-labs/otphp: ^9.1
 
 ## Installation
@@ -25,10 +25,10 @@ For more information about TOTP, see [RFC 6238](https://tools.ietf.org/html/rfc6
 Install with Composer:
 
 ```
-composer require silverstripe/totp-authenticator ^4.0
+composer require silverstripe/totp-authenticator ^3.0
 ```
 
-For SilverStripe 3.7 support, please use `silverstripe/totp-authenticator ^3.0`.
+For SilverStripe 4.0 support, please use `silverstripe/totp-authenticator ^4.0`.
 
 ## Configuration
 
@@ -77,7 +77,7 @@ See [License](LICENSE.md)
 
 ## Bugtracker
 
-Bugs are tracked in the issues section of this repository. Before submitting an issue please read over
+Bugs are tracked in the issues section of this repository [on GitHub](https://github.com/silverstripe/silverstripe-totp-authenticator). Before submitting an issue please read over
 existing issues to ensure yours is unique.
 
 If the issue does look like a new bug:
@@ -94,3 +94,9 @@ Please report security issues to the module maintainers directly. Please don't f
 
 If you would like to make contributions to the module please ensure you raise a pull request and discuss with the
 module maintainers.
+
+## Notes
+
+Unfortunately, [SilverStripe 3 has entered limited support in June 2018](https://www.silverstripe.org/blog/update-on-silverstripe-5-x/). This means we'll only be fixing critical bugs and security issues for SilverStripe 3 going forward.
+
+You can read the [SilverStripe Roadmap](https://www.silverstripe.org/software/roadmap/) for more information on our support commitments.

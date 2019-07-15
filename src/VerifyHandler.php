@@ -3,37 +3,24 @@
 namespace SilverStripe\TOTP;
 
 use Exception;
-use Psr\Log\LoggerInterface;
+use Injector;
 use RuntimeException;
-use SilverStripe\Control\HTTPRequest;
-use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\Core\Injector\Injector;
 use SilverStripe\MFA\Exception\AuthenticationFailedException;
 use SilverStripe\MFA\Method\Handler\VerifyHandlerInterface;
-use SilverStripe\MFA\Model\RegisteredMethod;
+use MFARegisteredMethod as RegisteredMethod;
 use SilverStripe\MFA\Service\EncryptionAdapterInterface;
 use SilverStripe\MFA\State\Result;
 use SilverStripe\MFA\Store\StoreInterface;
+use SS_HTTPRequest;
+use SS_Log;
+use SS_Object;
 
 /**
  * Handles verification requests using a time-based one-time password (TOTP) with the silverstripe/mfa module.
  */
-class VerifyHandler implements VerifyHandlerInterface
+class VerifyHandler extends SS_Object implements VerifyHandlerInterface
 {
-    use Injectable;
     use TOTPAware;
-
-    /**
-     * @var string[]
-     */
-    private static $dependencies = [
-        'Logger' => '%$' . LoggerInterface::class . '.mfa',
-    ];
-
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
 
     public function start(StoreInterface $store, RegisteredMethod $method): array
     {
@@ -61,8 +48,7 @@ class VerifyHandler implements VerifyHandlerInterface
         } catch (Exception $ex) {
             // noop: encryption may not be defined, so method should be disabled rather than application error
             $enabled = false;
-
-            $this->getLogger()->debug($ex->getMessage(), $ex->getTrace());
+            SS_Log::log($ex, SS_Log::DEBUG);
         }
 
         return [
@@ -71,7 +57,7 @@ class VerifyHandler implements VerifyHandlerInterface
         ];
     }
 
-    public function verify(HTTPRequest $request, StoreInterface $store, RegisteredMethod $registeredMethod): Result
+    public function verify(SS_HTTPRequest $request, StoreInterface $store, RegisteredMethod $registeredMethod): Result
     {
         $data = json_decode($request->getBody(), true);
         if (!$this->getTotp($store)->verify($data['code'] ?? '')) {
@@ -88,23 +74,5 @@ class VerifyHandler implements VerifyHandlerInterface
     public function getComponent(): string
     {
         return 'TOTPVerify';
-    }
-
-    /**
-     * @return LoggerInterface
-     */
-    public function getLogger(): ?LoggerInterface
-    {
-        return $this->logger;
-    }
-
-    /**
-     * @param LoggerInterface $logger
-     * @return VerifyHandler
-     */
-    public function setLogger(LoggerInterface $logger): VerifyHandler
-    {
-        $this->logger = $logger;
-        return $this;
     }
 }
