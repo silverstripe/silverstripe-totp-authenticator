@@ -58,7 +58,8 @@ class Method extends SS_Object implements MethodInterface
      */
     public function isAvailable(): bool
     {
-        return !empty(getenv('SS_MFA_SECRET_KEY'));
+        $secretKey = SecretKeyLoader::singleton()->get();
+        return !empty($secretKey);
     }
 
     public function getUnavailableMessage(): string

@@ -53,8 +53,9 @@ class RegisterHandler extends SS_Object implements RegisterHandlerInterface
         }
         $totp->setIssuer(SiteConfig::current_site_config()->Title);
 
+        $secretKey = SecretKeyLoader::singleton()->get();
         return [
-            'enabled' => !empty(getenv('SS_MFA_SECRET_KEY')),
+            'enabled' => !empty($secretKey),
             'uri' => $totp->getProvisioningUri(),
             'code' => $totp->getSecret(),
             'codeLength' => Injector::inst()->create(Method::class)->getCodeLength(),
