@@ -17,7 +17,7 @@ trait TOTPAware
      */
     protected function getEncryptionKey(): string
     {
-        return (string) getenv('SS_MFA_SECRET_KEY');
+        return SecretKeyLoader::singleton()->get();
     }
 
     /**

@@ -34,8 +34,9 @@ For SilverStripe 4.0 support, please use `silverstripe/totp-authenticator ^4.0`.
 
 ### Encryption key
 
-You will need to define an environment variable named `SS_MFA_SECRET_KEY` with a random secret key, which is used
-for encrypting the TOTP secret. The authentication method will not be available for use until this is correctly defined.
+You will need to define an environment variable or PHP constant named `SS_MFA_SECRET_KEY` with a random secret key,
+which is used for encrypting the TOTP secret. The authentication method will not be available for use until this
+is correctly defined. This should be done in your `_ss_environment.php` file.
 
 ### TOTP secret length
 
