@@ -23,6 +23,11 @@ class Method extends SS_Object implements MethodInterface
      */
     private static $code_length = 6;
 
+    public function getName(): string
+    {
+        return _t(__CLASS__ . '.NAME', 'Authenticator app');
+    }
+
     public function getURLSegment(): string
     {
         return 'totp';

@@ -38,6 +38,9 @@ You will need to define an environment variable or PHP constant named `SS_MFA_SE
 which is used for encrypting the TOTP secret. The authentication method will not be available for use until this
 is correctly defined. This should be done in your `_ss_environment.php` file.
 
+Please note that existing registered TOTP methods for users will not be usable on environments with different values
+for `SS_MFA_SECRET_KEY` than they were registered in.
+
 ### TOTP secret length
 
 You can also configure the length of the TOTP secret. This is the code that is displayed to users when they register
