@@ -107,11 +107,6 @@ class RegisterHandler implements RegisterHandlerInterface
         return Result::create()->setContext(['secret' => $secret]);
     }
 
-    public function getName(): string
-    {
-        return _t(__CLASS__ . '.NAME', 'Authenticator app');
-    }
-
     public function getDescription(): string
     {
         return _t(
@@ -123,6 +118,11 @@ class RegisterHandler implements RegisterHandlerInterface
     public function getSupportLink(): string
     {
         return (string) $this->config()->get('user_help_link');
+    }
+
+    public function getSupportText(): string
+    {
+        return _t(__CLASS__ . '.SUPPORT_LINK_DESCRIPTION', 'How to use authenticator apps.');
     }
 
     public function getComponent(): string

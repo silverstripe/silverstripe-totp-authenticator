@@ -118,16 +118,16 @@ class Verify extends Component {
    * @returns {HTMLElement}
    */
   renderSupportLink() {
-    const { method } = this.props;
+    const { method: { supportLink, supportText } } = this.props;
     const { ss: { i18n } } = window;
 
-    if (!method.supportLink) {
+    if (!supportLink) {
       return null;
     }
 
     return (
-      <a href={method.supportLink} target="_blank" rel="noopener noreferrer">
-        { i18n._t('TOTPVerify.HOW_TO_USE', 'How to use authenticator app.') }
+      <a href={supportLink} target="_blank" rel="noopener noreferrer">
+        {supportText || i18n._t('TOTPVerify.HOW_TO_USE', 'How to use authenticator apps.')}
       </a>
     );
   }

@@ -37,6 +37,9 @@ For SilverStripe 3.7 support, please use `silverstripe/totp-authenticator ^3.0`.
 You will need to define an environment variable named `SS_MFA_SECRET_KEY` with a random secret key, which is used
 for encrypting the TOTP secret. The authentication method will not be available for use until this is correctly defined.
 
+Please note that existing registered TOTP methods for users will not be usable on environments with different values
+for `SS_MFA_SECRET_KEY` than they were registered in.
+
 ### TOTP secret length
 
 You can also configure the length of the TOTP secret. This is the code that is displayed to users when they register

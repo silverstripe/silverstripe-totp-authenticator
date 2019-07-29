@@ -80,11 +80,6 @@ class VerifyHandler implements VerifyHandlerInterface
         return Result::create();
     }
 
-    public function getLeadInLabel(): string
-    {
-        return _t(__CLASS__ . '.NAME', 'Verify with authenticator app');
-    }
-
     public function getComponent(): string
     {
         return 'TOTPVerify';
