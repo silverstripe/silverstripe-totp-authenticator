@@ -137,7 +137,7 @@ class Verify extends Component {
     const { codeLength, error, method } = this.props;
     const { ss: { i18n } } = window;
 
-    const formGroupClasses = classnames('mfa-totp__validate-left form-group', {
+    const formGroupClasses = classnames('mfa-totp__validate-left', {
       'has-error': !!error,
     });
 
