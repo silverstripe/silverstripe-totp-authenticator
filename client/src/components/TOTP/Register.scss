@@ -54,6 +54,14 @@ $viewport-medium: 768px;
   &__scan-left {
     flex: 1;
     height: $scan-qr-height;
+
+    // Render a tidy white border around the code in Dark Mode
+    @media (prefers-color-scheme: dark) {
+      height: 170px;
+      padding: 5px;
+      border-radius: 3px;
+      background: #fff;
+    }
   }
 
   &__scan-middle {
