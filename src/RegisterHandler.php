@@ -25,12 +25,11 @@ class RegisterHandler implements RegisterHandlerInterface
 
     /**
      * The link to SilverStripe user help documentation for this authenticator.
-     * @todo add it
      *
      * @config
      * @var string
      */
-    private static $user_help_link = '';
+    private static $user_help_link = 'https://userhelp.silverstripe.org/en/4/optional_features/multi-factor_authentication/user_manual/using_authenticator_apps/'; // phpcs-disable-line
 
     /**
      * The desired length of the TOTP secret. This affects the UI, since it is displayed to the user to be entered
