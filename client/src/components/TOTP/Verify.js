@@ -163,7 +163,7 @@ class Verify extends Component {
             type="text"
             autoComplete="off"
             maxLength={codeLength}
-            className="mfa-totp__code form-control input-lg"
+            className="mfa-totp__code text form-control input-lg"
             value={code}
             ref={this.setCodeInput}
             onChange={this.handleChangeCode}
