@@ -137,7 +137,7 @@ class Verify extends Component {
     const { codeLength, error, method } = this.props;
     const { ss: { i18n } } = window;
 
-    const formGroupClasses = classnames('mfa-totp__validate-left form-group', {
+    const formGroupClasses = classnames('mfa-totp__validate-left', {
       'has-error': !!error,
     });
 
@@ -163,7 +163,7 @@ class Verify extends Component {
             type="text"
             autoComplete="off"
             maxLength={codeLength}
-            className="mfa-totp__code form-control input-lg"
+            className="mfa-totp__code text form-control input-lg"
             value={code}
             ref={this.setCodeInput}
             onChange={this.handleChangeCode}

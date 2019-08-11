@@ -3,6 +3,7 @@ $scan-qr-height: 160px;
 $scan-qr-manual-border-color: #cccccc;
 $color-status-bad: rgba(169, 30, 46, 1); // $color-message-error from mfa module
 $viewport-small: 480px;
+$viewport-medium: 768px;
 
 .mfa-totp {
   // Note: .form-control added for specificity
@@ -10,6 +11,11 @@ $viewport-small: 480px;
     font-size: 2rem;
     letter-spacing: 1rem;
     width: 80%;
+
+    // Tablet only
+    @media (max-width: $viewport-medium) {
+      width: 100%;
+    }
   }
 
   &__errors {
@@ -18,6 +24,7 @@ $viewport-small: 480px;
 
   &__validate-code {
     display: flex;
+    margin-bottom: 1rem;
   }
 
   &__validate-left {
@@ -34,7 +41,6 @@ $viewport-small: 480px;
 
   &__validate-right {
     margin-left: 1rem;
-    margin-top: -2rem;
     text-align: center;
   }
 
@@ -48,6 +54,14 @@ $viewport-small: 480px;
   &__scan-left {
     flex: 1;
     height: $scan-qr-height;
+
+    // Render a tidy white border around the code in Dark Mode
+    @media (prefers-color-scheme: dark) {
+      height: 170px;
+      padding: 5px;
+      border-radius: 3px;
+      background: #fff;
+    }
   }
 
   &__scan-middle {
@@ -71,6 +85,14 @@ $viewport-small: 480px;
     p:last-child {
       margin: 0;
     }
+  }
+}
+
+// Tablet only
+@media (max-width: $viewport-medium) {
+  // IE11 squishes all text until mobile point, unless we get rid of the image (which we need to do for mobile anyway).
+  .mfa-totp__validate-right {
+    display: none;
   }
 }
 
