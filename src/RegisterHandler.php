@@ -52,6 +52,8 @@ class RegisterHandler extends SS_Object implements RegisterHandlerInterface
         }
         $totp->setIssuer(SiteConfig::current_site_config()->Title);
 
+        $this->extend('updateTotp', $totp, $member);
+
         $secretKey = SecretKeyLoader::singleton()->get();
         return [
             'enabled' => !empty($secretKey),

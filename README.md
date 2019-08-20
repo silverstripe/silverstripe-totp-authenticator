@@ -75,6 +75,23 @@ SilverStripe\TOTP\RegisterHandler:
   user_help_link: 'https://intranet.mycompany.com/help-docs/using-totp'
 ```
 
+### TOTP issuer and label
+
+The TOTP "issuer" is the SilverStripe site name (set in SiteConfig) by default, and the "label" is the member's email
+address by default. These are the values that show up in your authenticator app. You can change these if you need
+to use something else, by writing an extension on `RegisterHandler`:
+
+```php
+class MyTOTPRegisterHandlerExtension extends Extension
+{
+    public function updateTotp(\OTPHP\TOTPInterface $totp, \Member $member)
+    {
+        $totp->setLabel($member->getCustomTOTPLabel());
+        $totp->setIssuer('My web project');
+    }
+}
+```
+
 ## License
 
 See [License](LICENSE.md)
