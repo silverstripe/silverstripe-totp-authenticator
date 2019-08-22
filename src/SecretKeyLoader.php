@@ -18,6 +18,6 @@ class SecretKeyLoader extends SS_Object
     {
         $environment = getenv('SS_MFA_SECRET_KEY');
         $constant = defined('SS_MFA_SECRET_KEY') ? constant('SS_MFA_SECRET_KEY') : '';
-        return (string) ($environment ?? $constant);
+        return (string) ($environment ?: $constant);
     }
 }
