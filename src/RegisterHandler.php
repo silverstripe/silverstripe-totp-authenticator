@@ -6,12 +6,14 @@ use ParagonIE\ConstantTime\Base32;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Environment;
+use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\MFA\Exception\AuthenticationFailedException;
 use SilverStripe\MFA\Method\Handler\RegisterHandlerInterface;
 use SilverStripe\MFA\Service\EncryptionAdapterInterface;
 use SilverStripe\MFA\State\Result;
 use SilverStripe\MFA\Store\StoreInterface;
+use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
 use SilverStripe\SiteConfig\SiteConfig;
 
@@ -21,6 +23,7 @@ use SilverStripe\SiteConfig\SiteConfig;
 class RegisterHandler implements RegisterHandlerInterface
 {
     use Configurable;
+    use Extensible;
     use TOTPAware;
 
     /**
@@ -50,9 +53,12 @@ class RegisterHandler implements RegisterHandlerInterface
 
         $member = $store->getMember() ?: Security::getCurrentUser();
         if ($member) {
-            $totp->setLabel($member->Email);
+            $uniqueIdentifier = (string) Member::config()->get('unique_identifier_field');
+            $totp->setLabel($member->{$uniqueIdentifier});
         }
         $totp->setIssuer(SiteConfig::current_site_config()->Title);
+
+        $this->extend('updateTotp', $totp, $member);
 
         return [
             'enabled' => !empty(Environment::getEnv('SS_MFA_SECRET_KEY')),
