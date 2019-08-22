@@ -13,6 +13,7 @@ use SilverStripe\MFA\Method\Handler\RegisterHandlerInterface;
 use SilverStripe\MFA\Service\EncryptionAdapterInterface;
 use SilverStripe\MFA\State\Result;
 use SilverStripe\MFA\Store\StoreInterface;
+use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
 use SilverStripe\SiteConfig\SiteConfig;
 
@@ -52,7 +53,8 @@ class RegisterHandler implements RegisterHandlerInterface
 
         $member = $store->getMember() ?: Security::getCurrentUser();
         if ($member) {
-            $totp->setLabel($member->Email);
+            $uniqueIdentifier = (string) Member::config()->get('unique_identifier_field');
+            $totp->setLabel($member->{$uniqueIdentifier});
         }
         $totp->setIssuer(SiteConfig::current_site_config()->Title);
 
