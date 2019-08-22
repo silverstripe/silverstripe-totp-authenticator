@@ -8,7 +8,7 @@
 Log in to SilverStripe with an authenticator app on your phone as a secondary factor, using a time-based one-time
 password (TOTP).
 
-This module provides a TOTP authenticator that plugs in to the [silverstripe/mfa](https://github.com/silverstripe/mfa)
+This module provides a TOTP authenticator that plugs in to the [silverstripe/mfa](https://github.com/silverstripe/silverstripe-mfa)
 module.
 
 For more information about TOTP, see [RFC 6238](https://tools.ietf.org/html/rfc6238).
