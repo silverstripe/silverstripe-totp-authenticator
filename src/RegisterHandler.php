@@ -3,8 +3,8 @@
 namespace SilverStripe\TOTP;
 
 use Injector;
+use Member;
 use ParagonIE\ConstantTime\Base32;
-use Security;
 use SilverStripe\MFA\Exception\AuthenticationFailedException;
 use SilverStripe\MFA\Method\Handler\RegisterHandlerInterface;
 use SilverStripe\MFA\Service\EncryptionAdapterInterface;
@@ -48,9 +48,10 @@ class RegisterHandler extends SS_Object implements RegisterHandlerInterface
 
         $totp = $this->getTotp($store);
 
-        $member = $store->getMember() ?: Security::getCurrentUser();
+        $member = $store->getMember() ?: Member::currentUser();
         if ($member) {
-            $totp->setLabel($member->Email);
+            $uniqueIdentifier = (string) Member::config()->get('unique_identifier_field');
+            $totp->setLabel($member->{$uniqueIdentifier});
         }
         $totp->setIssuer(SiteConfig::current_site_config()->Title);
 
