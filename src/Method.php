@@ -45,14 +45,13 @@ class Method extends SS_Object implements MethodInterface
 
     public function getThumbnail(): string
     {
-        return Director::absoluteURL($this->getModuleName() . '/client/dist/images/totp.svg');
+        return Director::absoluteURL('totp-authenticator/client/dist/images/totp.svg');
     }
 
     public function applyRequirements(): void
     {
-        $module = $this->getModuleName();
-        Requirements::javascript("$module/client/dist/js/bundle.js");
-        Requirements::css("$module/client/dist/styles/bundle.css");
+        Requirements::javascript('totp-authenticator/client/dist/js/bundle.js');
+        Requirements::css('totp-authenticator/client/dist/styles/bundle.css');
     }
 
     /**
@@ -79,17 +78,5 @@ class Method extends SS_Object implements MethodInterface
     public function getCodeLength(): int
     {
         return (int) $this->config()->get('code_length');
-    }
-
-    /**
-     * Get directory name this module is installed into
-     * SS3 is not specific or caring about what the module is named, only that it exists and is a valid SilverStripe
-     * mdoule.
-     *
-     * @return string
-     */
-    private function getModuleName(): string
-    {
-        return basename(realpath(__DIR__ . DIRECTORY_SEPARATOR . '..'));
     }
 }
