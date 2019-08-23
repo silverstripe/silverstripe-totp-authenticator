@@ -45,8 +45,7 @@ class Method extends SS_Object implements MethodInterface
 
     public function getThumbnail(): string
     {
-        $module = $this->getModuleName();
-        return "/$module/client/dist/images/totp.svg";
+        return Director::absoluteURL($this->getModuleName() . '/client/dist/images/totp.svg');
     }
 
     public function applyRequirements(): void
