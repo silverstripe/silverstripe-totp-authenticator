@@ -1,0 +1,10 @@
+nl:
+  SilverStripe\TOTP\Method:
+    NAME: ''
+    NOT_CONFIGURED: ''
+  SilverStripe\TOTP\RegisterHandler:
+    DESCRIPTION: ''
+    INVALID_CODE: ''
+    SUPPORT_LINK_DESCRIPTION: ''
+  SilverStripe\TOTP\VerifyHandler:
+    INVALID_CODE: 'Ongeldige code'

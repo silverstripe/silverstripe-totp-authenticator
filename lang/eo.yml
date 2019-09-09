@@ -1,0 +1,10 @@
+eo:
+  SilverStripe\TOTP\Method:
+    NAME: ''
+    NOT_CONFIGURED: 'Ĉi tiu metodo ankoraŭ estas neagordita.'
+  SilverStripe\TOTP\RegisterHandler:
+    DESCRIPTION: 'Uzu aŭtentigan aplikaĵon, ekzemple Google Authenticator, por skani la jenan kodon.'
+    INVALID_CODE: 'Donita kodo ne validas.'
+    SUPPORT_LINK_DESCRIPTION: ''
+  SilverStripe\TOTP\VerifyHandler:
+    INVALID_CODE: 'Nevalida kodo'
