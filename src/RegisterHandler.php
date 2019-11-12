@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SilverStripe\TOTP;
 
@@ -32,7 +34,7 @@ class RegisterHandler implements RegisterHandlerInterface
      * @config
      * @var string
      */
-    private static $user_help_link = 'https://userhelp.silverstripe.org/en/4/optional_features/multi-factor_authentication/user_manual/using_authenticator_apps/'; // phpcs-disable-line
+    private static $user_help_link = 'https://userhelp.silverstripe.org/en/4/optional_features/multi-factor_authentication/user_manual/using_authenticator_apps/'; // phpcs:ignore
 
     /**
      * The desired length of the TOTP secret. This affects the UI, since it is displayed to the user to be entered
