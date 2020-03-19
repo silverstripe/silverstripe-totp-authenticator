@@ -1,0 +1,10 @@
+da:
+  SilverStripe\TOTP\Method:
+    NAME: ''
+    NOT_CONFIGURED: 'Denne metode er endnu ikke konfigureret'
+  SilverStripe\TOTP\RegisterHandler:
+    DESCRIPTION: 'Brug en autentificering app så som Google Autentificering  til at scanne den følgende kode'
+    INVALID_CODE: 'Koden var ikke gyldig'
+    SUPPORT_LINK_DESCRIPTION: ''
+  SilverStripe\TOTP\VerifyHandler:
+    INVALID_CODE: 'Ugyldig kode'

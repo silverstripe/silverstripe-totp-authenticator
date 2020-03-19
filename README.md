@@ -40,6 +40,14 @@ for encrypting the TOTP secret. The authentication method will not be available 
 Please note that existing registered TOTP methods for users will not be usable on environments with different values
 for `SS_MFA_SECRET_KEY` than they were registered in.
 
+There are many ways to create a random secret key, on most Linux installations
+it can be achieved through `openssl`. The secret key length depends on your
+specific information security controls, but 32 characters is a good baseline.
+
+```
+openssl rand -base64 32
+```
+
 ### TOTP secret length
 
 You can also configure the length of the TOTP secret. This is the code that is displayed to users when they register
