@@ -40,12 +40,12 @@ for encrypting the TOTP secret. The authentication method will not be available 
 Please note that existing registered TOTP methods for users will not be usable on environments with different values
 for `SS_MFA_SECRET_KEY` than they were registered in.
 
-There are many ways to create a random secret key, on most Linux installations
-it can be achieved through `openssl`. The secret key length depends on your
+There are many ways to create a random secret key, the easiest
+is by executing a `php` command on the command line. The secret key length depends on your
 specific information security controls, but 32 characters is a good baseline.
 
 ```
-openssl rand -base64 32
+php -r 'echo substr(base64_encode(random_bytes(32)), 0, 32) . "\n";'
 ```
 
 ### TOTP secret length
