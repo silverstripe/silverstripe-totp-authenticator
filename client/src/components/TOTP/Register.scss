@@ -1,4 +1,4 @@
-$totp-img-height: 200px;
+$totp-img-size: 200px;
 $scan-qr-height: 160px;
 $scan-qr-manual-border-color: #cccccc;
 $color-status-bad: rgba(169, 30, 46, 1); // $color-message-error from mfa module
@@ -35,8 +35,10 @@ $viewport-medium: 768px;
     }
   }
 
+  /* Manual sizing required for IE 11 to compute layout correctly */
   &__validate-img {
-    height: $totp-img-height;
+    height: $totp-img-size;
+    width: $totp-img-size;
   }
 
   &__validate-right {
