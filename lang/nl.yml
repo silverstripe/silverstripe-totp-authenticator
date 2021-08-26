@@ -1,10 +1,10 @@
 nl:
   SilverStripe\TOTP\Method:
-    NAME: ''
-    NOT_CONFIGURED: ''
+    NAME: 'Authenticator app'
+    NOT_CONFIGURED: 'Deze methode is nog niet ingesteld'
   SilverStripe\TOTP\RegisterHandler:
-    DESCRIPTION: ''
-    INVALID_CODE: ''
-    SUPPORT_LINK_DESCRIPTION: ''
+    DESCRIPTION: 'Gebruik een app zoals Google Authenticator om de code te scannen'
+    INVALID_CODE: 'Ingevoerde code is niet geldig'
+    SUPPORT_LINK_DESCRIPTION: 'Hoe gebruik je een authenticator app?'
   SilverStripe\TOTP\VerifyHandler:
     INVALID_CODE: 'Ongeldige code'
