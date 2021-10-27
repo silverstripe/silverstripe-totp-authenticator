@@ -8,7 +8,7 @@ use SilverStripe\TOTP\Method;
 
 class MethodTest extends SapphireTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -3,7 +3,7 @@
 namespace SilverStripe\TOTP\Tests;
 
 use OTPHP\TOTPInterface;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\Session;
@@ -43,7 +43,7 @@ class VerifyHandlerTest extends SapphireTest
      */
     protected $member;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -100,7 +100,7 @@ class VerifyHandlerTest extends SapphireTest
     public function testVerify()
     {
         $this->request->setBody(json_encode(['code' => '135246']));
-        /** @var VerifyHandler&PHPUnit_Framework_MockObject_MockObject $handler */
+        /** @var VerifyHandler&MockObject $handler */
         $handler = $this->getMockBuilder(VerifyHandler::class)
             ->setMethods(['getTotp'])
             ->getMock();
@@ -121,7 +121,7 @@ class VerifyHandlerTest extends SapphireTest
     {
         Environment::setEnv('SS_MFA_SECRET_KEY', null);
 
-        /** @var LoggerInterface|PHPUnit_Framework_MockObject_MockObject $logger */
+        /** @var LoggerInterface|MockObject $logger */
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->once())->method('debug');
 
