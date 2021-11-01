@@ -4,7 +4,7 @@ namespace SilverStripe\TOTP\Tests;
 
 use OTPHP\TOTP;
 use OTPHP\TOTPInterface;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\Session;
 use SilverStripe\Core\Environment;
@@ -29,7 +29,7 @@ class RegisterHandlerTest extends SapphireTest
      */
     protected $member;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -48,12 +48,12 @@ class RegisterHandlerTest extends SapphireTest
         $result = $this->handler->start($store);
 
         $this->assertTrue($result['enabled'], 'Method should be enabled');
-        $this->assertContains(
+        $this->assertStringContainsString(
             rawurlencode(SiteConfig::current_site_config()->Title),
             $result['uri'],
             'Site name should be stored in provisioning URI'
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             rawurlencode($this->member->Email),
             $result['uri'],
             'Provisioning URI should contain user email'
@@ -87,12 +87,12 @@ class RegisterHandlerTest extends SapphireTest
         $store = new SessionStore($this->member);
         $store->setState(['secret' => 'opensesame']);
 
-        /** @var RegisterHandler|PHPUnit_Framework_MockObject_MockObject $handler */
+        /** @var RegisterHandler|MockObject $handler */
         $handler = $this->getMockBuilder(RegisterHandler::class)
             ->setMethods(['getTotp'])
             ->getMock();
         $handler->expects($this->once())->method('getTotp')->willReturn(
-            /** @var TOTP|PHPUnit_Framework_MockObject_MockObject $totpMock */
+            /** @var TOTP|MockObject $totpMock */
             $totpMock = $this->createMock(TOTPInterface::class)
         );
         $totpMock->expects($this->once())->method('verify')->with('123456')->willReturn(true);
@@ -100,7 +100,7 @@ class RegisterHandlerTest extends SapphireTest
         $result = $handler->register($request, $store);
         $context = $result->getContext();
         $this->assertNotEmpty($context['secret']);
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             'opensesame',
             $context['secret'],
             'Encrypted secret should not contain the plain text secret'
