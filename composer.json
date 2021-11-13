@@ -26,7 +26,8 @@
     "autoload": {
         "psr-4": {
             "SilverStripe\\TOTP\\": "src/",
-            "SilverStripe\\TOTP\\Tests\\": "tests/"
+            "SilverStripe\\TOTP\\Tests\\": "tests/",
+            "SilverStripe\\TOTP\\Tests\\Behat\\Context\\": "tests/behat/src/"
         }
     },
     "extra": {
