@@ -7,6 +7,5 @@ env:
   global:
     - REQUIRE_RECIPE_TESTING="^2"
     - REQUIRE_FRAMEWORKTEST="^0.4.2"
-    # used by behat-extension LoginContext which expects a screen to choose
-    # either topt or webauthn
+    # Used by behat-extension LoginContext which expects a screen to choose either totp or webauthn when not skipping mfa
     - REQUIRE_EXTRA="silverstripe/webauthn-authenticator:^4"

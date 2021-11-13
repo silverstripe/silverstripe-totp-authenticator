@@ -8,4 +8,6 @@ jobs:
   ci:
     uses: silverstripe/github-actions-ci-cd/.github/workflows/ci.yml@0.1.11
     with:
+      # Used by behat-extension LoginContext which expects a screen to choose either totp or webauthn when not skipping mfa
+      composer_require_extra: silverstripe/webauthn-authenticator:^4
       run_endtoend: true
