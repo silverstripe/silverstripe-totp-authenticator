@@ -75,7 +75,7 @@ class VerifyHandler implements VerifyHandlerInterface
 
     public function verify(HTTPRequest $request, StoreInterface $store, RegisteredMethod $registeredMethod): Result
     {
-        $data = json_decode($request->getBody(), true);
+        $data = json_decode($request->getBody() ?? '', true);
         if (!$this->getTotp($store)->verify($data['code'] ?? '')) {
             return Result::create(false, _t(__CLASS__ . '.INVALID_CODE', 'Invalid code'));
         }
