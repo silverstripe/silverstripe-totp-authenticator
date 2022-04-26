@@ -49,12 +49,12 @@ class RegisterHandlerTest extends SapphireTest
 
         $this->assertTrue($result['enabled'], 'Method should be enabled');
         $this->assertStringContainsString(
-            rawurlencode(SiteConfig::current_site_config()->Title),
+            rawurlencode(SiteConfig::current_site_config()->Title ?? ''),
             $result['uri'],
             'Site name should be stored in provisioning URI'
         );
         $this->assertStringContainsString(
-            rawurlencode($this->member->Email),
+            rawurlencode($this->member->Email ?? ''),
             $result['uri'],
             'Provisioning URI should contain user email'
         );

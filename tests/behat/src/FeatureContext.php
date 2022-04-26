@@ -44,8 +44,8 @@ class FeatureContext extends SilverStripeContext
      */
     private function pressMfaButton($section, $button)
     {
-        $section = str_replace("'", "\\'", $section);
-        $button = str_replace("'", "\\'", $button);
+        $section = str_replace("'", "\\'", $section ?? '');
+        $button = str_replace("'", "\\'", $button ?? '');
         $js = <<<JS
             document.querySelectorAll('.registered-method-list-item').forEach(el => {
                 if (!el.innerHTML.includes('{$section}')) {

@@ -78,7 +78,7 @@ class RegisterHandler implements RegisterHandlerInterface
     protected function generateSecret(): string
     {
         $length = $this->config()->get('secret_length');
-        return substr(trim(Base32::encodeUpper(random_bytes(64)), '='), 0, $length);
+        return substr(trim(Base32::encodeUpper(random_bytes(64)) ?? '', '='), 0, $length);
     }
 
     /**
@@ -92,7 +92,7 @@ class RegisterHandler implements RegisterHandlerInterface
      */
     public function register(HTTPRequest $request, StoreInterface $store): Result
     {
-        $data = json_decode($request->getBody(), true);
+        $data = json_decode($request->getBody() ?? '', true);
         $result = $this->getTotp($store)->verify($data['code'] ?? '');
         if (!$result) {
             return Result::create(false, _t(__CLASS__ . '.INVALID_CODE', 'Provided code was not valid'));
