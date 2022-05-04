@@ -1,0 +1,12 @@
+{
+    "TOTPRegister.NEXT": "Suivant",
+    "TOTPRegister.BACK": "Retour",
+    "TOTPRegister.INTRO": "Vérification des codes créés par l'application de votre téléphone.",
+    "TOTPRegister.OR": "Ou",
+    "TOTPRegister.MANUAL": "Saisir manuellement le code suivant dans l'application d'authentification :",
+    "TOTPRegister.HOW_TO_USE": "Comment utilise l'application d'authentification.",
+    "TOTPVerify.NEXT": "Suivant",
+    "TOTPVerify.HOW_TO_USE": "Comment utilise l'application d'authentification.",
+    "TOTPVerify.VERIFY": "Utiliser le code de vérification à partir de votre application d'authentification",
+    "TOTPVerify.ENTER_CODE": "Saisir code {length}-numérique"
+}
