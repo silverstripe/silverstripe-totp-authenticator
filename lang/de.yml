@@ -1,0 +1,10 @@
+de:
+  SilverStripe\TOTP\Method:
+    NAME: Authenticator-App
+    NOT_CONFIGURED: 'Diese Methode ist noch nicht konfiguriert worden.'
+  SilverStripe\TOTP\RegisterHandler:
+    DESCRIPTION: 'Verwenden Sie eine Authentifizierungs-App wie Google Authenticator, um den folgenden Code zu scannen'
+    INVALID_CODE: 'Der angegebene Code war nicht gültig'
+    SUPPORT_LINK_DESCRIPTION: 'Wie man Authenticator-Apps verwendet.'
+  SilverStripe\TOTP\VerifyHandler:
+    INVALID_CODE: 'Ungültiger Code'
