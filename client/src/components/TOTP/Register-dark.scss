@@ -1,0 +1,11 @@
+@media (prefers-color-scheme: dark) {
+  .dark-mode-enabled {
+    .mfa-totp__scan-left {
+      // Render a tidy white border around the code in Dark Mode
+      height: 170px;
+      padding: 5px;
+      border-radius: 3px;
+      background: #fff;
+    }
+  }
+}
