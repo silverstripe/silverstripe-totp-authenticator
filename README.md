@@ -1,11 +1,9 @@
-# SilverStripe TOTP Authenticator
+# Silverstripe TOTP Authenticator
 
-[![CI](https://github.com/silverstripe/silverstripe-totp-authenticator/actions/workflows/ci.yml/badge.svg)](https://github.com/silverstripe/silverstripe-totp-authenticator/actions/workflows/ci.yml))
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/silverstripe/silverstripe-totp-authenticator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/silverstripe/silverstripe-totp-authenticator/?branch=master)
-[![codecov](https://codecov.io/gh/silverstripe/silverstripe-totp-authenticator/branch/master/graph/badge.svg)](https://codecov.io/gh/silverstripe/silverstripe-totp-authenticator)
-[![SilverStripe supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
+[![CI](https://github.com/silverstripe/silverstripe-totp-authenticator/actions/workflows/ci.yml/badge.svg)](https://github.com/silverstripe/silverstripe-totp-authenticator/actions/workflows/ci.yml)
+[![Silverstripe supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
 
-Log in to SilverStripe with an authenticator app on your phone as a secondary factor, using a time-based one-time
+Log in to Silverstripe with an authenticator app on your phone as a secondary factor, using a time-based one-time
 password (TOTP).
 
 This module provides a TOTP authenticator that plugs in to the [silverstripe/mfa](https://github.com/silverstripe/silverstripe-mfa)
@@ -16,7 +14,7 @@ For more information about TOTP, see [RFC 6238](https://tools.ietf.org/html/rfc6
 ## Requirements
 
 * PHP ^7.1
-* SilverStripe ^4.1
+* Silverstripe ^4.1
 * silverstripe/mfa: ^4.0
 * spomky-labs/otphp: ^9.1
 
@@ -28,7 +26,7 @@ Install with Composer:
 composer require silverstripe/totp-authenticator ^4.0
 ```
 
-For SilverStripe 3.7 support, please use `silverstripe/totp-authenticator ^3.0`.
+For Silverstripe 3.7 support, please use `silverstripe/totp-authenticator ^3.0`.
 
 ## Configuration
 
@@ -84,7 +82,7 @@ SilverStripe\TOTP\RegisterHandler:
 
 ### TOTP issuer and label
 
-The TOTP "issuer" is the SilverStripe site name (set in SiteConfig) by default, and the "label" is the member's email
+The TOTP "issuer" is the Silverstripe site name (set in SiteConfig) by default, and the "label" is the member's email
 address by default. These are the values that show up in your authenticator app. You can change these if you need
 to use something else, by writing an extension on `RegisterHandler`:
 
@@ -113,8 +111,8 @@ If the issue does look like a new bug:
  - Create a new issue
  - Describe the steps required to reproduce your issue, and the expected outcome. Unit tests, screenshots
    and screencasts can help here.
- - Describe your environment as detailed as possible: SilverStripe version, Browser, PHP version,
-   Operating System, any installed SilverStripe modules.
+ - Describe your environment as detailed as possible: Silverstripe version, Browser, PHP version,
+   Operating System, any installed Silverstripe modules.
 
 Please report security issues to the module maintainers directly. Please don't file security issues in the bug tracker.
 
