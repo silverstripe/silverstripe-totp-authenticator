@@ -3,10 +3,10 @@ Feature: Use MFA TOTP
   I want to use MFA TOTP
 
    Background:
-    Given the "group" "EDITOR group" has permissions "CMS_ACCESS_LeftAndMain"
+    Given the "group" "EDITOR" has permissions "Access to 'Security' section"
 
     # Login to create user and then logout
-    And I am logged in with "EDITOR" permissions
+    And I am logged in as a member of "EDITOR" group
     And I go to "/Security/login"
     And I press the "Log in as someone else" button
     And I reset has skipped mfa registration for "EDITOR" permissions user
@@ -77,7 +77,7 @@ Feature: Use MFA TOTP
     And I should see a "button.btn-primary[disabled]" element
 
   Scenario: My profile
-    Given I am logged in with "EDITOR" permissions
+    Given I am logged in as a member of "EDITOR" group
     And I add a TOTP method for "EDITOR" permissions user
     And I go to "/admin/myprofile"
     And I scroll to the MFA section
@@ -117,7 +117,7 @@ Feature: Use MFA TOTP
     Then I should not see a ".registered-method-list-item__control" element
 
   Scenario: Cannot remove only method if MFA is required
-    Given I am logged in with "EDITOR" permissions
+    Given I am logged in as a member of "EDITOR" group
     And I add a TOTP method for "EDITOR" permissions user
     And I set MFA to required
     And I go to "/admin/myprofile"
@@ -147,7 +147,7 @@ Feature: Use MFA TOTP
     And I go to "/Security/login"
     And I press the "Log in as someone else" button
     Given I add a TOTP method for "ADMIN" permissions user
-    Given I am logged in with "EDITOR" permissions
+    Given I am logged in as a member of "EDITOR" group
     And I go to "/admin/security"
     # Click the first row
     And I click on the ".col-FirstName" element
