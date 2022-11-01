@@ -1,0 +1,12 @@
+{
+    "TOTPRegister.NEXT": "Nästa",
+    "TOTPRegister.BACK": "Tillbaka",
+    "TOTPRegister.INTRO": "Verifieringskoderna skapas av en app på din telefon.",
+    "TOTPRegister.OR": "Eller",
+    "TOTPRegister.MANUAL": "Ange manuellt följande kod i autentiseringsappen:",
+    "TOTPRegister.HOW_TO_USE": "Hur man använder autentiseringsappen.",
+    "TOTPVerify.NEXT": "Nästa",
+    "TOTPVerify.HOW_TO_USE": "Hur man använder autentiseringsappen.",
+    "TOTPVerify.VERIFY": "Använd verifieringskoden från din autentiseringsapp.",
+    "TOTPVerify.ENTER_CODE": "Ange {length}-siffrig kod"
+}

@@ -1,0 +1,10 @@
+fi_FI:
+  SilverStripe\TOTP\Method:
+    NAME: 'Todennus sovellusta'
+    NOT_CONFIGURED: 'Tätä toimintoa ei vielä ole määritetty.'
+  SilverStripe\TOTP\RegisterHandler:
+    DESCRIPTION: 'Käytä todennus appia kuten Google Authenticator koodin skannaamiseen'
+    INVALID_CODE: 'Annettu koodi ei ole voimassa oleva'
+    SUPPORT_LINK_DESCRIPTION: 'Miten käytät todennus sovellusta.'
+  SilverStripe\TOTP\VerifyHandler:
+    INVALID_CODE: 'Virheellinen koodi'

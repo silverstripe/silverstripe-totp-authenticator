@@ -1,0 +1,10 @@
+sv:
+  SilverStripe\TOTP\Method:
+    NAME: Autentiseringsapp
+    NOT_CONFIGURED: 'Denna metod har inte konfigurerats ännu.'
+  SilverStripe\TOTP\RegisterHandler:
+    DESCRIPTION: 'Använd en autentiseringsapp som till exempel Google Authenticator för att skanna följande kod'
+    INVALID_CODE: 'Den angivna koden var inte giltig'
+    SUPPORT_LINK_DESCRIPTION: 'Hur man använder autentiseringsappar.'
+  SilverStripe\TOTP\VerifyHandler:
+    INVALID_CODE: 'Felaktig kod'
