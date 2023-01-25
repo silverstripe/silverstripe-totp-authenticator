@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import QRCode from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 import { formatCode } from 'lib/formatCode';
 import { inject } from 'lib/Injector'; // eslint-disable-line
 
@@ -132,7 +132,7 @@ class Register extends Component {
 
           <div className="mfa-totp__scan-code">
             <div className="mfa-totp__scan-left">
-              <QRCode value={uri} size={160} />
+              <QRCodeSVG value={uri} size={160} />
             </div>
 
             <div className="mfa-totp__scan-middle">
