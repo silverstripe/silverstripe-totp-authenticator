@@ -152,7 +152,7 @@ describe('Register', () => {
         />
       );
 
-      expect(wrapper.find('QRCode')).toHaveLength(1);
+      expect(wrapper.find('QRCodeSVG')).toHaveLength(1);
     });
   });
 
