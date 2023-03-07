@@ -1,6 +1,6 @@
 da:
   SilverStripe\TOTP\Method:
-    NAME: ''
+    NAME: 'Autentificerings app'
     NOT_CONFIGURED: 'Denne metode er endnu ikke konfigureret'
   SilverStripe\TOTP\RegisterHandler:
     DESCRIPTION: 'Brug en autentificering app så som Google Autentificering  til at scanne den følgende kode'
