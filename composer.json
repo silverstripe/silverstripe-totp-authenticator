@@ -14,8 +14,8 @@
     "license": "BSD-3-Clause",
     "require": {
         "php": "^7.4 || ^8.0",
-        "silverstripe/mfa": "4.8.x-dev",
-        "silverstripe/siteconfig": "4.13.x-dev",
+        "silverstripe/mfa": "^4.0",
+        "silverstripe/siteconfig": "^4.0",
         "spomky-labs/otphp": "^10",
         "paragonie/constant_time_encoding": "^2.0"
     },
