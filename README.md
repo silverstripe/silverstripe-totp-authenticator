@@ -11,22 +11,11 @@ module.
 
 For more information about TOTP, see [RFC 6238](https://tools.ietf.org/html/rfc6238).
 
-## Requirements
-
-* PHP ^7.1
-* Silverstripe ^4.1
-* silverstripe/mfa: ^4.0
-* spomky-labs/otphp: ^9.1
-
 ## Installation
 
-Install with Composer:
-
+```sh
+composer require silverstripe/totp-authenticator
 ```
-composer require silverstripe/totp-authenticator ^4.0
-```
-
-For Silverstripe 3.7 support, please use `silverstripe/totp-authenticator ^3.0`.
 
 ## Configuration
 
