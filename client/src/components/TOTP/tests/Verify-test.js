@@ -1,11 +1,8 @@
-/* global jest, describe, it, expect */
+/* global jest, test, expect */
 
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
 import Verify from '../Verify';
-
-Enzyme.configure({ adapter: new Adapter() });
+import { render, screen, fireEvent } from '@testing-library/react';
 
 window.ss = {
   i18n: {
@@ -14,209 +11,148 @@ window.ss = {
   },
 };
 
-const mockMethod = {
-  urlSegment: 'totp',
-  name: 'TOTP',
-  description: 'Verify using TOTP',
-  supportLink: 'https://google.com',
-  component: 'TOTPVerify',
-  thumbnail: 'totp.svg',
-};
+function makeProps(obj = {}) {
+  return {
+    method: {
+      urlSegment: 'totp',
+      name: 'TOTP',
+      description: 'Verify using TOTP',
+      supportLink: 'https://google.com',
+      component: 'TOTPVerify',
+      thumbnail: 'totp.svg',
+    },
+    onCompleteVerification: () => null,
+    ...obj
+  };
+}
 
-const onCompleteVerificationMock = jest.fn();
+test('Verify canSubmit() returns false when code in not 6 chars', async () => {
+  render(
+    <Verify {...makeProps()}/>
+  );
+  const input = await screen.findByLabelText('Enter {length}-digit code');
+  fireEvent.change(input, { target: { value: '12345' } });
+  const next = await screen.findByText('Next');
+  expect(next.hasAttribute('disabled')).toBe(true);
+});
 
-describe('Verify', () => {
-  beforeEach(() => {
-    onCompleteVerificationMock.mockReset();
-  });
+test('Verify canSubmit() returns true when code is 6 chars', async () => {
+  render(
+    <Verify {...makeProps()}/>
+  );
+  const input = await screen.findByLabelText('Enter {length}-digit code');
+  fireEvent.change(input, { target: { value: '123456' } });
+  const next = await screen.findByText('Next');
+  expect(next.hasAttribute('disabled')).toBe(false);
+});
 
-  describe('canSubmit()', () => {
-    it('returns false when code is not 6 chars', () => {
-      const wrapper = shallow(
-        <Verify
-          onCompleteVerification={onCompleteVerificationMock}
-          method={mockMethod}
-        />
-      );
+test('Verify handleInputKeyUp() treats enter key as a form submission when code is valid', async () => {
+  const onCompleteVerification = jest.fn();
+  render(
+    <Verify {...makeProps({
+      onCompleteVerification
+    })}
+    />
+  );
+  const input = await screen.findByLabelText('Enter {length}-digit code');
+  fireEvent.change(input, { target: { value: '123456' } });
+  fireEvent.keyUp(input, { keyCode: 13 });
+  expect(onCompleteVerification).toHaveBeenCalled();
+});
 
-      wrapper.instance().setState({ code: '12345' });
-      expect(wrapper.instance().canSubmit()).toBe(false);
-    });
+test('Verify handleInputKeyUp() does nothing when the code is invalid', async () => {
+  const onCompleteVerification = jest.fn();
+  render(
+    <Verify {...makeProps({
+      onCompleteVerification
+    })}
+    />
+  );
+  const input = await screen.findByLabelText('Enter {length}-digit code');
+  fireEvent.change(input, { target: { value: 'ABC' } });
+  fireEvent.keyUp(input, { keyCode: 13 });
+  expect(onCompleteVerification).not.toHaveBeenCalled();
+});
 
-    it('returns true when code is 6 chars', () => {
-      const wrapper = shallow(
-        <Verify
-          onCompleteVerification={onCompleteVerificationMock}
-          method={mockMethod}
-        />
-      );
+test('Verify handleSubmit() calls onCompleteVerification() and passes the code', async () => {
+  const onCompleteVerification = jest.fn();
+  render(
+    <Verify {...makeProps({
+      onCompleteVerification
+    })}
+    />
+  );
+  const input = await screen.findByLabelText('Enter {length}-digit code');
+  fireEvent.change(input, { target: { value: '123456' } });
+  const next = await screen.findByText('Next');
+  fireEvent.click(next);
+  expect(onCompleteVerification).toHaveBeenCalledWith({ code: '123456' });
+});
 
-      wrapper.instance().setState({ code: '123456' });
-      expect(wrapper.instance().canSubmit()).toBe(true);
-    });
-  });
+test('Verify renderSupportLink() renders nothing when no support link is defined in the method', async () => {
+  render(
+    <Verify {...makeProps({
+      method: {
+        urlSegment: 'totp',
+        name: 'TOTP',
+      }
+    })}
+    />
+  );
+  await screen.findByLabelText('Enter {length}-digit code');
+  expect(screen.queryByText('How to use authenticator apps.')).toBeNull();
+});
 
-  describe('handleChangeCode()', () => {
-    it('updates the code in the state', () => {
-      const wrapper = shallow(
-        <Verify
-          onCompleteVerification={onCompleteVerificationMock}
-          method={mockMethod}
-        />
-      );
+test('Verify renderSupportLink() renders a support link for the provided method on both screens', async () => {
+  render(
+    <Verify {...makeProps()}/>
+  );
+  await screen.findByLabelText('Enter {length}-digit code');
+  expect(screen.queryByText('How to use authenticator apps.')).not.toBeNull();
+});
 
-      wrapper.instance().handleChangeCode({ target: { value: 'foo' } });
-      expect(wrapper.instance().state.code).toBe('foo');
-    });
-  });
+test('Verify renderVerifyForm() renders an input for the code', async () => {
+  render(
+    <Verify {...makeProps()}/>
+  );
+  const el = await screen.findByLabelText('Enter {length}-digit code');
+  expect(el.classList).toContain('mfa-totp__code');
+});
 
-  describe('handleInputKeyUp()', () => {
-    it('treats enter key as a form submission when code is valid', () => {
-      const wrapper = shallow(
-        <Verify
-          onCompleteVerification={onCompleteVerificationMock}
-          method={mockMethod}
-        />
-      );
+test('Verify renderVerifyForm() identifies errors when passed', async () => {
+  render(
+    <Verify {...makeProps({
+      error: 'Something went wrong'
+    })}
+    />
+  );
+  const el = await screen.findByText('Something went wrong');
+  expect(el).not.toBeNull();
+});
 
-      wrapper.instance().setState({ code: '123456' });
-      wrapper.find('.mfa-totp__code').simulate('keyup', { keyCode: 13 });
-      expect(onCompleteVerificationMock.mock.calls).toHaveLength(1);
-    });
+test('Verify renders the method thumbnail', async () => {
+  render(
+    <Verify {...makeProps()}/>
+  );
+  const el = await screen.findByAltText('TOTP');
+  expect(el.classList).toContain('mfa-totp__validate-img');
+});
 
-    it('does nothing when code is not valid', () => {
-      const wrapper = shallow(
-        <Verify
-          onCompleteVerification={onCompleteVerificationMock}
-          method={mockMethod}
-        />
-      );
+test('Verify renderVerifyForm() defaults to a 6 character code length', async () => {
+  render(
+    <Verify {...makeProps()}/>
+  );
+  const el = await screen.findByLabelText('Enter {length}-digit code');
+  expect(el.getAttribute('maxlength')).toBe('6');
+});
 
-      wrapper.instance().setState({ code: 'ABC' });
-      wrapper.find('.mfa-totp__code').simulate('keyup', { keyCode: 13 });
-      expect(onCompleteVerificationMock.mock.calls).toHaveLength(0);
-    });
-  });
-
-  describe('handleSubmit()', () => {
-    it('calls the onCompleteVerification prop and passes the code', () => {
-      const wrapper = shallow(
-        <Verify
-          onCompleteVerification={onCompleteVerificationMock}
-          method={mockMethod}
-        />
-      );
-
-      wrapper.instance().handleChangeCode({ target: { value: 'FOO468' } });
-      wrapper.instance().handleSubmit();
-      expect(onCompleteVerificationMock.mock.calls.length).toBe(1);
-      expect(onCompleteVerificationMock.mock.calls[0][0]).toEqual({ code: 'FOO468' });
-    });
-  });
-
-  describe('renderActionsMenu()', () => {
-    it('disables the "Next" button on code validation unless you have entered 6 characters', () => {
-      const wrapper = shallow(
-        <Verify
-          onCompleteVerification={onCompleteVerificationMock}
-          method={mockMethod}
-        />
-      );
-
-      wrapper.instance().setState({ code: '' });
-      expect(wrapper.find('.mfa-action-list .btn').first().props().disabled).toBe(true);
-
-      wrapper.instance().setState({ code: 'FOO' });
-      expect(wrapper.find('.mfa-action-list .btn').first().props().disabled).toBe(true);
-
-      wrapper.instance().setState({ code: 'FOO123' });
-      expect(wrapper.find('.mfa-action-list .btn').first().props().disabled).toBe(false);
-    });
-  });
-
-  describe('renderSupportLink()', () => {
-    it('renders nothing when no support link is defined in the method', () => {
-      const wrapper = shallow(
-        <Verify
-          onCompleteVerification={onCompleteVerificationMock}
-          method={{
-            urlSegment: 'totp',
-            name: 'TOTP',
-          }}
-        />
-      );
-
-      expect(wrapper.text()).not.toContain('How to use authenticator app');
-    });
-
-    it('renders a support link for the provided method on both screens', () => {
-      const wrapper = shallow(
-        <Verify
-          onCompleteVerification={onCompleteVerificationMock}
-          method={mockMethod}
-        />
-      );
-
-      expect(wrapper.text()).toContain('How to use authenticator app');
-    });
-  });
-
-  describe('renderVerifyForm()', () => {
-    it('renders an input for the code', () => {
-      const wrapper = shallow(
-        <Verify
-          onCompleteVerification={onCompleteVerificationMock}
-          method={mockMethod}
-        />
-      );
-
-      expect(wrapper.find('.mfa-totp__code')).toHaveLength(1);
-    });
-
-    it('identifies errors when passed', () => {
-      const wrapper = shallow(
-        <Verify
-          error="Something went wrong"
-          onCompleteVerification={onCompleteVerificationMock}
-          method={mockMethod}
-        />
-      );
-
-      expect(wrapper.text()).toContain('Something went wrong');
-    });
-
-    it('renders the method thumbnail', () => {
-      const wrapper = shallow(
-        <Verify
-          onCompleteVerification={onCompleteVerificationMock}
-          method={mockMethod}
-        />
-      );
-
-      expect(wrapper.find('.mfa-totp__validate-img')).toHaveLength(1);
-    });
-
-    it('defaults to a 6 character code length', () => {
-      const wrapper = shallow(
-        <Verify
-          onCompleteVerification={onCompleteVerificationMock}
-          method={mockMethod}
-        />
-      );
-
-      expect(wrapper.find('.mfa-totp__code').props().maxLength).toBe(6);
-    });
-
-    it('allows the code length to be configured', () => {
-      const wrapper = shallow(
-        <Verify
-          codeLength={12}
-          onCompleteVerification={onCompleteVerificationMock}
-          method={mockMethod}
-        />
-      );
-
-      expect(wrapper.find('.mfa-totp__code').props().maxLength).toBe(12);
-    });
-  });
+test('Verify renderVerifyForm() allows the code length to be configured', async () => {
+  render(
+    <Verify {...makeProps({
+      codeLength: 12
+    })}
+    />
+  );
+  const el = await screen.findByLabelText('Enter {length}-digit code');
+  expect(el.getAttribute('maxlength')).toBe('12');
 });
