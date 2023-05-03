@@ -1,193 +1,119 @@
-/* global jest, describe, it, expect */
-
-jest.mock('lib/Injector');
+/* global jest, test, expect */
 
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
 import { Component as Register } from '../Register';
-
-Enzyme.configure({ adapter: new Adapter() });
+import { render, screen, fireEvent } from '@testing-library/react';
 
 window.ss = {
   i18n: { _t: (key, string) => string },
 };
 
-const mockMethod = {
-  urlSegment: 'totp',
-  name: 'TOTP',
-  description: 'Register using TOTP',
-  supportLink: 'https://google.com',
-  component: 'TOTPRegister',
-};
+function makeProps(obj = {}) {
+  return {
+    onBack: () => null,
+    onCompleteRegistration: () => null,
+    method: {
+      urlSegment: 'totp',
+      name: 'TOTP',
+      description: 'Register using TOTP',
+      supportLink: 'https://google.com',
+      component: 'TOTPRegister',
+    },
+    code: 'FOO123',
+    uri: 'example',
+    TOTPVerifyComponent: ({ moreOptionsControl }) => (
+      <div data-testid="totpverifycomponent">
+        {moreOptionsControl}
+      </div>
+    ),
+    ...obj
+  };
+}
 
-const onBackMock = jest.fn();
-const onCompleteRegistrationMock = jest.fn();
+test('Register handleBack() calls the onBack prop', async () => {
+  const onBack = jest.fn();
+  render(
+    <Register {...makeProps({
+      onBack
+    })}
+    />
+  );
+  const back = await screen.findByText('Back');
+  fireEvent.click(back);
+  expect(onBack).toHaveBeenCalled();
+});
 
-const TOTPVerifyComponent = () => <div />;
+test('Register renderErrorScreen renders the providded errors', async () => {
+  render(
+    <Register {...makeProps({
+      errors: ['Something went wrong', 'I am a unit test'],
+    })}
+    />
+  );
+  const el = await screen.findByText('Something went wrong, I am a unit test');
+  expect(el.classList).toContain('mfa-totp__errors');
+});
 
-describe('Register', () => {
-  beforeEach(() => {
-    onBackMock.mockReset();
-    onCompleteRegistrationMock.mockReset();
-  });
+test('Register handleBackToScan() clears errors when clicking on the back button', async () => {
+  const { container } = render(
+    <Register {...makeProps({
+      error: 'Something went wrong'
+    })}
+    />
+  );
+  const back = await screen.findByText('Back');
+  fireEvent.click(back);
+  const el = await screen.findByText('How to use authenticator apps.');
+  expect(el).not.toBeNull();
+  expect(container.querySelectorAll('.mfa-totp__errors')).toHaveLength(0);
+});
 
-  describe('handleBack()', () => {
-    it('calls the onBack prop', () => {
-      const wrapper = shallow(
-        <Register
-          onBack={onBackMock}
-          onCompleteRegistration={onCompleteRegistrationMock}
-          method={mockMethod}
-          code="FOO123"
-          uri="example"
-          TOTPVerifyComponent={TOTPVerifyComponent}
-        />
-      );
+test('Register renderActionsMenu() renders a "Next" and "Back" button', async () => {
+  render(
+    <Register {...makeProps()}/>
+  );
+  const next = await screen.findByText('Next');
+  const back = await screen.findByText('Back');
+  expect(next).not.toBeNull();
+  expect(back).not.toBeNull();
+});
 
-      wrapper.instance().handleBack();
-      expect(onBackMock.mock.calls.length).toBe(1);
-    });
-  });
+test('Register goes to the input validation screen when clicking "Next" on the QR code screen', async () => {
+  render(
+    <Register {...makeProps()}/>
+  );
+  const next = await screen.findByText('Next');
+  fireEvent.click(next);
+  const el = await screen.findByTestId('totpverifycomponent');
+  expect(el).not.toBeNull();
+});
 
-  describe('renderErrorScreen()', () => {
-    it('renders the provided errors', () => {
-      const wrapper = shallow(
-        <Register
-          onBack={onBackMock}
-          onCompleteRegistration={onCompleteRegistrationMock}
-          method={mockMethod}
-          code="FOO123"
-          uri="example"
-          errors={['Something went wrong', 'I am a unit test']}
-          TOTPVerifyComponent={TOTPVerifyComponent}
-        />
-      );
+test('Register renderScanCodeScreen() renders a QR code', async () => {
+  const { container } = render(
+    <Register {...makeProps()}/>
+  );
+  await screen.findByText('How to use authenticator apps.');
+  expect(container.querySelectorAll('.mfa-totp__scan-left svg')).toHaveLength(1);
+});
 
-      expect(wrapper.text()).toContain('Something went wrong');
-      expect(wrapper.text()).toContain('I am a unit test');
-    });
-  });
+test('Register renderSupportLink() renders nothing when no support link is defined in the method', async () => {
+  render(
+    <Register {...makeProps({
+      method: {
+        urlSegment: 'totp',
+        name: 'TOTP',
+      }
+    })}
+    />
+  );
+  await screen.findByText('Verification codes are created by an app on your phone.');
+  expect(screen.queryByText('How to use authenticator apps.')).toBeNull();
+});
 
-  describe('handleBackToScan()', () => {
-    it('clears errors when clicking on the back button', () => {
-      const wrapper = shallow(
-        <Register
-          onBack={onBackMock}
-          onCompleteRegistration={onCompleteRegistrationMock}
-          method={mockMethod}
-          code="FOO123"
-          uri="example"
-          TOTPVerifyComponent={TOTPVerifyComponent}
-        />
-      );
-
-      wrapper.setState({ error: 'Something went wrong' });
-      wrapper.instance().handleBackToScan();
-      expect(wrapper.instance().state.view).toBe('SCAN_CODE');
-      expect(wrapper.instance().state.error).toBeNull();
-    });
-  });
-
-  describe('renderActionsMenu()', () => {
-    it('renders a "Next" and "Back" button', () => {
-      const wrapper = shallow(
-        <Register
-          onBack={onBackMock}
-          onCompleteRegistration={onCompleteRegistrationMock}
-          method={mockMethod}
-          code="FOO123"
-          uri="example"
-          TOTPVerifyComponent={TOTPVerifyComponent}
-        />
-      );
-
-      expect(wrapper.find('.mfa-action-list .btn').first()).toHaveLength(1);
-      expect(wrapper.find('.mfa-action-list .btn').at(1)).toHaveLength(1);
-    });
-
-    it('goes back to the previous screen from the initial screen when clicking "Back"', () => {
-      const wrapper = shallow(
-        <Register
-          onBack={onBackMock}
-          onCompleteRegistration={onCompleteRegistrationMock}
-          method={mockMethod}
-          code="FOO123"
-          uri="example"
-          TOTPVerifyComponent={TOTPVerifyComponent}
-        />
-      );
-
-      wrapper.find('.mfa-action-list .btn').at(1).simulate('click');
-      expect(onBackMock.mock.calls.length).toBe(1);
-    });
-
-    it('goes to the input validation screen when clicking "Next" on the QR code screen', () => {
-      const wrapper = shallow(
-        <Register
-          onBack={onBackMock}
-          onCompleteRegistration={onCompleteRegistrationMock}
-          method={mockMethod}
-          code="FOO123"
-          uri="example"
-          TOTPVerifyComponent={TOTPVerifyComponent}
-        />
-      );
-
-      wrapper.find('.mfa-action-list .btn').first().simulate('click');
-      expect(wrapper.find(TOTPVerifyComponent)).toHaveLength(1);
-    });
-  });
-
-  describe('renderScanCodeScreen()', () => {
-    it('renders a QR code', () => {
-      const wrapper = shallow(
-        <Register
-          onBack={onBackMock}
-          onCompleteRegistration={onCompleteRegistrationMock}
-          method={mockMethod}
-          code="FOO123"
-          uri="example"
-          TOTPVerifyComponent={TOTPVerifyComponent}
-        />
-      );
-
-      expect(wrapper.find('QRCodeSVG')).toHaveLength(1);
-    });
-  });
-
-  describe('renderSupportLink()', () => {
-    it('renders nothing when no support link is defined in the method', () => {
-      const wrapper = shallow(
-        <Register
-          onBack={onBackMock}
-          onCompleteRegistration={onCompleteRegistrationMock}
-          method={{
-            urlSegment: 'totp',
-            name: 'TOTP',
-          }}
-          code="FOO123"
-          uri="example"
-          TOTPVerifyComponent={TOTPVerifyComponent}
-        />
-      );
-
-      expect(wrapper.text()).not.toContain('How to use authenticator app');
-    });
-
-    it('renders a support link for the provided method on both screens', () => {
-      const wrapper = shallow(
-        <Register
-          onBack={onBackMock}
-          onCompleteRegistration={onCompleteRegistrationMock}
-          method={mockMethod}
-          code="FOO123"
-          uri="example"
-          TOTPVerifyComponent={TOTPVerifyComponent}
-        />
-      );
-
-      expect(wrapper.text()).toContain('How to use authenticator app');
-    });
-  });
+test('Register renderSupportLink() renders a support link for the provided method on both screens', async () => {
+  render(
+    <Register {...makeProps()}/>
+  );
+  await screen.findByText('Verification codes are created by an app on your phone.');
+  expect(screen.queryByText('How to use authenticator apps.')).not.toBeNull();
 });
