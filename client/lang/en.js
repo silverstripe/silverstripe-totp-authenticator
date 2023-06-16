@@ -6,15 +6,15 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
   }
 } else {
   ss.i18n.addDictionary('en', {
-    "TOTPRegister.NEXT": "Next",
     "TOTPRegister.BACK": "Back",
-    "TOTPRegister.INTRO": "Verification codes are created by an app on your phone. ",
-    "TOTPRegister.OR": "Or",
-    "TOTPRegister.MANUAL": "Enter manually the following code into authentication app:",
     "TOTPRegister.HOW_TO_USE": "How to use authenticator app.",
-    "TOTPVerify.NEXT": "Next",
+    "TOTPRegister.INTRO": "Verification codes are created by an app on your phone. ",
+    "TOTPRegister.MANUAL": "Enter manually the following code into authentication app:",
+    "TOTPRegister.NEXT": "Next",
+    "TOTPRegister.OR": "Or",
+    "TOTPVerify.ENTER_CODE": "Enter {length}-digit code",
     "TOTPVerify.HOW_TO_USE": "How to use authenticator app.",
-    "TOTPVerify.VERIFY": "Use verification code from your authenticator app. ",
-    "TOTPVerify.ENTER_CODE": "Enter {length}-digit code"
+    "TOTPVerify.NEXT": "Next",
+    "TOTPVerify.VERIFY": "Use verification code from your authenticator app. "
 });
 }
