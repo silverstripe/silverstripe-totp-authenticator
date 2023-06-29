@@ -110,7 +110,6 @@ class Verify extends Component {
     );
   }
 
-
   /**
    * If there is a configured support link, will render a link to the TOTP authenticator's
    * support documentation (e.g. userhelp).
