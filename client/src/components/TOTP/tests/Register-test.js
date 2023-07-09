@@ -1,8 +1,8 @@
 /* global jest, test, expect */
 
 import React from 'react';
-import { Component as Register } from '../Register';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { Component as Register } from '../Register';
 
 window.ss = {
   i18n: { _t: (key, string) => string },
