@@ -6,15 +6,15 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
   }
 } else {
   ss.i18n.addDictionary('fr', {
-    "TOTPRegister.NEXT": "Suivant",
     "TOTPRegister.BACK": "Retour",
-    "TOTPRegister.INTRO": "Vérification des codes créés par l'application de votre téléphone.",
-    "TOTPRegister.OR": "Ou",
-    "TOTPRegister.MANUAL": "Saisir manuellement le code suivant dans l'application d'authentification :",
     "TOTPRegister.HOW_TO_USE": "Comment utilise l'application d'authentification.",
-    "TOTPVerify.NEXT": "Suivant",
+    "TOTPRegister.INTRO": "Vérification des codes créés par l'application de votre téléphone.",
+    "TOTPRegister.MANUAL": "Saisir manuellement le code suivant dans l'application d'authentification :",
+    "TOTPRegister.NEXT": "Suivant",
+    "TOTPRegister.OR": "Ou",
+    "TOTPVerify.ENTER_CODE": "Saisir code {length}-numérique",
     "TOTPVerify.HOW_TO_USE": "Comment utilise l'application d'authentification.",
-    "TOTPVerify.VERIFY": "Utiliser le code de vérification à partir de votre application d'authentification",
-    "TOTPVerify.ENTER_CODE": "Saisir code {length}-numérique"
+    "TOTPVerify.NEXT": "Suivant",
+    "TOTPVerify.VERIFY": "Utiliser le code de vérification à partir de votre application d'authentification"
 });
 }
