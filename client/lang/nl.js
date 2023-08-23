@@ -6,15 +6,15 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
   }
 } else {
   ss.i18n.addDictionary('nl', {
-    "TOTPRegister.NEXT": "Volgende",
     "TOTPRegister.BACK": "Vorige",
-    "TOTPRegister.INTRO": "Verificaties codes worden gegenereerd via een app op je telefoon.",
-    "TOTPRegister.OR": "of",
-    "TOTPRegister.MANUAL": "Type de code handmatig over in je Authenticator-app",
     "TOTPRegister.HOW_TO_USE": "Hoe gebruik je een authenticator app?",
-    "TOTPVerify.NEXT": "Volgende",
+    "TOTPRegister.INTRO": "Verificaties codes worden gegenereerd via een app op je telefoon.",
+    "TOTPRegister.MANUAL": "Type de code handmatig over in je Authenticator-app",
+    "TOTPRegister.NEXT": "Volgende",
+    "TOTPRegister.OR": "of",
+    "TOTPVerify.ENTER_CODE": "Voor een {length}-cijferige code in",
     "TOTPVerify.HOW_TO_USE": "Hoe gebruik je een authenticator app?",
-    "TOTPVerify.VERIFY": "Gebruik de verificatie-code van je Authenticator-app op je telefoon",
-    "TOTPVerify.ENTER_CODE": "Voor een {length}-cijferige code in"
+    "TOTPVerify.NEXT": "Volgende",
+    "TOTPVerify.VERIFY": "Gebruik de verificatie-code van je Authenticator-app op je telefoon"
 });
 }

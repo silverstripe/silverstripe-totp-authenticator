@@ -6,15 +6,15 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
   }
 } else {
   ss.i18n.addDictionary('de', {
-    "TOTPRegister.NEXT": "Weiter",
     "TOTPRegister.BACK": "Zurück",
-    "TOTPRegister.INTRO": "Die Verifizierungscodes werden von einer App auf Ihrem Telefon erstellt.",
-    "TOTPRegister.OR": "Oder",
-    "TOTPRegister.MANUAL": "Geben Sie den folgenden Code manuell in die Authentifizierungsanwendung ein:",
     "TOTPRegister.HOW_TO_USE": "Wie man Authenticator-Apps verwendet.",
-    "TOTPVerify.NEXT": "Weiter",
+    "TOTPRegister.INTRO": "Die Verifizierungscodes werden von einer App auf Ihrem Telefon erstellt.",
+    "TOTPRegister.MANUAL": "Geben Sie den folgenden Code manuell in die Authentifizierungsanwendung ein:",
+    "TOTPRegister.NEXT": "Weiter",
+    "TOTPRegister.OR": "Oder",
+    "TOTPVerify.ENTER_CODE": "{length}-stelligen Code eingeben",
     "TOTPVerify.HOW_TO_USE": "Wie man Authenticator-Apps verwendet.",
-    "TOTPVerify.VERIFY": "Verwenden Sie den Verifizierungscode aus Ihrer Authenticator-App. ",
-    "TOTPVerify.ENTER_CODE": "{length}-stelligen Code eingeben"
+    "TOTPVerify.NEXT": "Weiter",
+    "TOTPVerify.VERIFY": "Verwenden Sie den Verifizierungscode aus Ihrer Authenticator-App. "
 });
 }

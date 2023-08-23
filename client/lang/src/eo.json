@@ -1,12 +1,12 @@
 {
-    "TOTPRegister.NEXT": "Sekva",
     "TOTPRegister.BACK": "Antaŭa",
-    "TOTPRegister.INTRO": "Kontrolajn kodojn kreas aplikaĵo en via telefono.",
-    "TOTPRegister.OR": "Aŭ",
-    "TOTPRegister.MANUAL": "Mane enigu la jenan kodon en la atentigan aplikaĵon.",
     "TOTPRegister.HOW_TO_USE": "Kiel uzi aŭtentigan aplikaĵon.",
-    "TOTPVerify.NEXT": "Sekva",
+    "TOTPRegister.INTRO": "Kontrolajn kodojn kreas aplikaĵo en via telefono.",
+    "TOTPRegister.MANUAL": "Mane enigu la jenan kodon en la atentigan aplikaĵon.",
+    "TOTPRegister.NEXT": "Sekva",
+    "TOTPRegister.OR": "Aŭ",
+    "TOTPVerify.ENTER_CODE": "Enigu {length}-ciferan kodon",
     "TOTPVerify.HOW_TO_USE": "Kiel uzi aŭtentigan aplikaĵon.",
-    "TOTPVerify.VERIFY": "Uzu kontrolan kodon el via aŭtentiga aplikaĵo.",
-    "TOTPVerify.ENTER_CODE": "Enigu {length}-ciferan kodon"
+    "TOTPVerify.NEXT": "Sekva",
+    "TOTPVerify.VERIFY": "Uzu kontrolan kodon el via aŭtentiga aplikaĵo."
 }
