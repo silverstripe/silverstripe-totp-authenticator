@@ -6,15 +6,15 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
   }
 } else {
   ss.i18n.addDictionary('fi_FI', {
-    "TOTPRegister.NEXT": "Seuraava",
     "TOTPRegister.BACK": "Takaisin",
-    "TOTPRegister.INTRO": "Todennuskoodit luodaan puhelimesi sovelluksella.",
-    "TOTPRegister.OR": "Tai",
-    "TOTPRegister.MANUAL": "Kirjoita seuraava koodi käsin todennus sovellukseen:",
     "TOTPRegister.HOW_TO_USE": "Miten käytät todennus sovellusta.",
-    "TOTPVerify.NEXT": "Seuraava",
+    "TOTPRegister.INTRO": "Todennuskoodit luodaan puhelimesi sovelluksella.",
+    "TOTPRegister.MANUAL": "Kirjoita seuraava koodi käsin todennus sovellukseen:",
+    "TOTPRegister.NEXT": "Seuraava",
+    "TOTPRegister.OR": "Tai",
+    "TOTPVerify.ENTER_CODE": "Lisää {length}-numeroinen koodi",
     "TOTPVerify.HOW_TO_USE": "Miten käytät todennus sovellusta.",
-    "TOTPVerify.VERIFY": "Käytä varmennuskoodia todennus sovelluksestasi.",
-    "TOTPVerify.ENTER_CODE": "Lisää {length}-numeroinen koodi"
+    "TOTPVerify.NEXT": "Seuraava",
+    "TOTPVerify.VERIFY": "Käytä varmennuskoodia todennus sovelluksestasi."
 });
 }

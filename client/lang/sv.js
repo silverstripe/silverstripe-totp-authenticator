@@ -6,15 +6,15 @@ if (typeof(ss) === 'undefined' || typeof(ss.i18n) === 'undefined') {
   }
 } else {
   ss.i18n.addDictionary('sv', {
-    "TOTPRegister.NEXT": "Nästa",
     "TOTPRegister.BACK": "Tillbaka",
-    "TOTPRegister.INTRO": "Verifieringskoderna skapas av en app på din telefon.",
-    "TOTPRegister.OR": "Eller",
-    "TOTPRegister.MANUAL": "Ange manuellt följande kod i autentiseringsappen:",
     "TOTPRegister.HOW_TO_USE": "Hur man använder autentiseringsappen.",
-    "TOTPVerify.NEXT": "Nästa",
+    "TOTPRegister.INTRO": "Verifieringskoderna skapas av en app på din telefon.",
+    "TOTPRegister.MANUAL": "Ange manuellt följande kod i autentiseringsappen:",
+    "TOTPRegister.NEXT": "Nästa",
+    "TOTPRegister.OR": "Eller",
+    "TOTPVerify.ENTER_CODE": "Ange {length}-siffrig kod",
     "TOTPVerify.HOW_TO_USE": "Hur man använder autentiseringsappen.",
-    "TOTPVerify.VERIFY": "Använd verifieringskoden från din autentiseringsapp.",
-    "TOTPVerify.ENTER_CODE": "Ange {length}-siffrig kod"
+    "TOTPVerify.NEXT": "Nästa",
+    "TOTPVerify.VERIFY": "Använd verifieringskoden från din autentiseringsapp."
 });
 }
