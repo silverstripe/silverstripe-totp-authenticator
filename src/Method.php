@@ -57,6 +57,7 @@ class Method implements MethodInterface
 
     public function applyRequirements(): void
     {
+        Requirements::add_i18n_javascript('silverstripe/totp-authenticator: client/lang');
         Requirements::javascript('silverstripe/totp-authenticator: client/dist/js/bundle.js');
         Requirements::css('silverstripe/totp-authenticator: client/dist/styles/bundle.css');
     }
