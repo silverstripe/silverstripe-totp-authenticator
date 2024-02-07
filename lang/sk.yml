@@ -1,0 +1,10 @@
+sk:
+  SilverStripe\TOTP\Method:
+    NAME: 'Aplikácia Autentifikátor'
+    NOT_CONFIGURED: 'Táto metóda ešte nebola nakonfigurovaná.'
+  SilverStripe\TOTP\RegisterHandler:
+    DESCRIPTION: 'Pomocou autentifikačnej aplikácie, ako je Google Authenticator, naskenujte nasledujúci kód'
+    INVALID_CODE: 'Zadaný kód nebol platný'
+    SUPPORT_LINK_DESCRIPTION: 'Ako používať aplikácie autentifikátora.'
+  SilverStripe\TOTP\VerifyHandler:
+    INVALID_CODE: 'Neplatný kód'
