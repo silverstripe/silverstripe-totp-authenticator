@@ -13,78 +13,13 @@ For more information about TOTP, see [RFC 6238](https://tools.ietf.org/html/rfc6
 
 ## Installation
 
-```sh
+```bash
 composer require silverstripe/totp-authenticator
 ```
 
-## Configuration
+## Documentation
 
-### Encryption key
-
-You will need to define an environment variable named `SS_MFA_SECRET_KEY` with a random secret key, which is used
-for encrypting the TOTP secret. The authentication method will not be available for use until this is correctly defined.
-
-Please note that existing registered TOTP methods for users will not be usable on environments with different values
-for `SS_MFA_SECRET_KEY` than they were registered in.
-
-There are many ways to create a random secret key, the easiest
-is by executing a `php` command on the command line. The secret key length depends on your
-specific information security controls, but 32 characters is a good baseline.
-
-```
-php -r 'echo substr(base64_encode(random_bytes(32)), 0, 32) . "\n";'
-```
-
-### TOTP secret length
-
-You can also configure the length of the TOTP secret. This is the code that is displayed to users when they register
-to use TOTP, for example "alternatively, enter this code manually into your app." The default length is 16 characters.
-If you do not want to support manual code entry in your project, you may want to increase the length in order to
-increase the entropy of the TOTP secret, however removing the secret from the UI will require adjustments to the React
-components. See the `RegisterHandler.secret_length` configuration property.
-
-```yaml
-SilverStripe\TOTP\RegisterHandler:
-  secret_length: 64
-```
-
-### TOTP code length
-
-If you want to change the length of the TOTP codes the application accepts, you can adjust `Method.code_length`. The
-default length is 6 characters.
-
-```yaml
-SilverStripe\TOTP\Method:
-  code_length: 10
-```
-
-### User help link
-
-When this method is used on the website during the multi-factor login process, it may show a "find out more" link
-to user documentation. You can disable this by nullifying the configuration property `RegisterHandler.user_help_link`
-or you can change it to point to your own documentation instead:
-
-```yaml
-SilverStripe\TOTP\RegisterHandler:
-  user_help_link: 'https://intranet.mycompany.com/help-docs/using-totp'
-```
-
-### TOTP issuer and label
-
-The TOTP "issuer" is the Silverstripe site name (set in SiteConfig) by default, and the "label" is the member's email
-address by default. These are the values that show up in your authenticator app. You can change these if you need
-to use something else, by writing an extension on `RegisterHandler`:
-
-```php
-class MyTOTPRegisterHandlerExtension extends Extension
-{
-    public function updateTotp(\OTPHP\TOTPInterface $totp, \SilverStripe\Security\Member $member)
-    {
-        $totp->setLabel($member->getCustomTOTPLabel());
-        $totp->setIssuer('My web project');
-    }
-}
-```
+Read the [TOTP authenticator documentation](https://docs.silverstripe.org/en/optional_features/mfa/authentictors/totp).
 
 ## License
 
