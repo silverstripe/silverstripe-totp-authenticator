@@ -1,6 +1,5 @@
 nl:
   SilverStripe\TOTP\Method:
-    NAME: 'Authenticator app'
     NOT_CONFIGURED: 'Deze methode is nog niet ingesteld'
   SilverStripe\TOTP\RegisterHandler:
     DESCRIPTION: 'Gebruik een app zoals Google Authenticator om de code te scannen'
