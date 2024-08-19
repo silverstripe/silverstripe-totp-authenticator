@@ -13,7 +13,7 @@
     ],
     "license": "BSD-3-Clause",
     "require": {
-        "php": "^8.1",
+        "php": "^8.3",
         "silverstripe/mfa": "^6",
         "silverstripe/siteconfig": "^6",
         "spomky-labs/otphp": "^11.1",
