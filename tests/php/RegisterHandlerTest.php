@@ -89,7 +89,7 @@ class RegisterHandlerTest extends SapphireTest
 
         /** @var RegisterHandler|MockObject $handler */
         $handler = $this->getMockBuilder(RegisterHandler::class)
-            ->setMethods(['getTotp'])
+            ->onlyMethods(['getTotp'])
             ->getMock();
         $handler->expects($this->once())->method('getTotp')->willReturn(
             /** @var TOTP|MockObject $totpMock */
