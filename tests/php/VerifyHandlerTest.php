@@ -102,7 +102,7 @@ class VerifyHandlerTest extends SapphireTest
         $this->request->setBody(json_encode(['code' => '135246']));
         /** @var VerifyHandler&MockObject $handler */
         $handler = $this->getMockBuilder(VerifyHandler::class)
-            ->setMethods(['getTotp'])
+            ->onlyMethods(['getTotp'])
             ->getMock();
 
         $handler->expects($this->once())->method('getTotp')->willReturn(
