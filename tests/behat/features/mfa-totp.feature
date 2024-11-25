@@ -61,12 +61,9 @@ Feature: Use MFA TOTP
     And I log in with "NO_ACCESS@example.org" and "Secret!123" without skipping MFA
     Then I should not see "Add extra security to your account"
 
-  Scenario: User can select a verification method, handles incorrect TOTP codes
+  Scenario: Handles incorrect TOTP codes
     When I log in with "EDITOR@example.org" and "Secret!123" without skipping MFA
     And I press the "Get started" button
-    And I should see "Select a verification method"
-    When I click on the "img[alt='Authenticator app']" element
-    And I press the "Next" button
     # QR code screen
     And I press the "Next" button
     # Enter invalid code
@@ -86,13 +83,6 @@ Feature: Use MFA TOTP
     # See registered MFA methods
     Then I should see "Authenticator app: Registered"
     And I should see "Recovery codes"
-
-    # Add another MFA method
-    When I press the "Add another MFA method" button
-    And I wait for 3 seconds
-    Then I should see "Select a verification method"
-    # close the modal
-    When I press the "Back" button
 
     # Reset method - will show a QR code - should still manually test
     When I press the TOTP authenticator app "Reset" button with javascript
