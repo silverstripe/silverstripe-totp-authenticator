@@ -17,7 +17,7 @@
         "silverstripe/mfa": "^6",
         "silverstripe/siteconfig": "^6",
         "spomky-labs/otphp": "^11.3",
-        "paragonie/constant_time_encoding": "^2.6"
+        "paragonie/constant_time_encoding": "^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^11.3",
