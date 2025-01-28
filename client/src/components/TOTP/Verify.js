@@ -136,7 +136,7 @@ class Verify extends Component {
     const { codeLength, error, method } = this.props;
     const { ss: { i18n } } = window;
 
-    const formGroupClasses = classnames('mfa-totp__validate-left', {
+    const formGroupClasses = classnames('mfa-totp__validate-left', 'form-group', {
       'has-error': !!error,
     });
 
@@ -148,7 +148,7 @@ class Verify extends Component {
             'Use verification code from your authenticator app. '
           ) }{ this.renderSupportLink() }</p>
 
-          <label htmlFor="totp-code" className="control-label">
+          <label htmlFor="totp-code" className="control-label form-label">
             {
               i18n.inject(
                 i18n._t('TOTPVerify.ENTER_CODE', 'Enter {length}-digit code'),
