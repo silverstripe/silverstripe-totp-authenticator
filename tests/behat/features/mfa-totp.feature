@@ -3,7 +3,8 @@ Feature: Use MFA TOTP
   I want to use MFA TOTP
 
    Background:
-    Given the "group" "EDITOR" has permissions "Access to 'Security' section"
+    Given I add an extension "SilverStripe\BehatExtension\Extensions\ActivateSudoModeServiceExtension" to the "SilverStripe\Security\SudoMode\SudoModeService" class
+    And the "group" "EDITOR" has permissions "Access to 'Security' section"
 
     # Login to create user and then logout
     And I am logged in as a member of "EDITOR" group
