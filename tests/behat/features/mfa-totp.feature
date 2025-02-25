@@ -30,7 +30,7 @@ Feature: Use MFA TOTP
     And I click the "Access" CMS tab
     And I select the "MFA is required for everyone" radio button
     # Set date in the future
-    And I fill in "Form_EditForm_MFAGracePeriodExpires" with "2030-01-01"
+    And I fill in "Form_EditForm_MFAGracePeriodExpires" with "01-01-2030"
     And I press the "Save" button
     When I go to "/Security/login"
     And I press the "Log in as someone else" button
@@ -44,7 +44,7 @@ Feature: Use MFA TOTP
     And I click the "Access" CMS tab
     And I select the "MFA is required for everyone" radio button
     # Set date in the past
-    And I fill in "Form_EditForm_MFAGracePeriodExpires" with "2020-01-01"
+    And I fill in "Form_EditForm_MFAGracePeriodExpires" with "01-01-2020"
     And I press the "Save" button
     When I go to "/Security/login"
     And I press the "Log in as someone else" button
