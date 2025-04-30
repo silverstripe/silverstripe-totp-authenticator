@@ -19,7 +19,7 @@ composer require silverstripe/totp-authenticator
 
 ## Documentation
 
-Read the [TOTP authenticator documentation](https://docs.silverstripe.org/en/optional_features/mfa/authentictors/totp).
+Read the [Silverstripe TOTP authenticator documentation](https://docs.silverstripe.org/en/optional_features/mfa/authenticators/totp-authenticator/).
 
 ## License
 
