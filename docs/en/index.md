@@ -1,8 +1,12 @@
 ---
-title: TOTP authenticator
+title: TOTP Authenticator
+summary: Installing and configuring the TOTP authenticator module.
+icon: key
 ---
 
 # TOTP authenticator
+
+The TOTP (Time-based One-Time Password) authenticator module adds an extra layer of security to your Silverstripe CMS application by providing a multi-factor authentication (MFA) method. When a user has this method enabled, they will be required to provide a unique, time-sensitive code from an authenticator app (such as Google Authenticator or Authy) in addition to their password when logging in.
 
 ## Installation
 
@@ -34,7 +38,7 @@ You can also configure the length of the TOTP secret. This is the code that is d
 to use TOTP, for example "alternatively, enter this code manually into your app." The default length is 16 characters.
 If you do not want to support manual code entry in your project, you may want to increase the length in order to
 increase the entropy of the TOTP secret, however removing the secret from the UI will require adjustments to the React
-components. See the [`RegisterHandler.secret_length`](api:SilverStripe\MFA\BackupCode\RegisterHandler->secret_length) configuration property.
+components. See the [`RegisterHandler.secret_length`](api:SilverStripe\TOTP\RegisterHandler->secret_length) configuration property.
 
 ```yml
 SilverStripe\TOTP\RegisterHandler:
@@ -66,7 +70,7 @@ SilverStripe\TOTP\RegisterHandler:
 
 The TOTP "issuer" is the Silverstripe site name (set in SiteConfig) by default, and the "label" is the member's email
 address by default. These are the values that show up in your authenticator app. You can change these if you need
-to use something else, by writing an extension on `RegisterHandler`:
+to use something else, by writing an extension on [`RegisterHandler`](api:SilverStripe\TOTP\RegisterHandler):
 
 ```php
 // app/src/MFA/Extensions/MyTOTPRegisterHandlerExtension.php
