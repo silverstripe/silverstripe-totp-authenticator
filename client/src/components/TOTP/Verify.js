@@ -1,6 +1,6 @@
 /* global window */
 
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
@@ -8,64 +8,24 @@ import classnames from 'classnames';
  * This component provides the user interface for logging in with a one-time time-based password
  * (TOTP) for a user.
  */
-class Verify extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      code: '',
-    };
-
-    // Note: deliberately React 15 compatible ref syntax for SS 4.0-4.3 support
-    this.codeInput = null;
-    this.setCodeInput = element => {
-      this.codeInput = element;
-    };
-
-    this.handleChangeCode = this.handleChangeCode.bind(this);
-    this.handleInputKeyUp = this.handleInputKeyUp.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+const Verify = ({
+  codeLength = 6,
+  error = null,
+  onCompleteVerification,
+  method,
+  moreOptionsControl,
+}) => {
+  const [code, setCode] = useState('');
+  const codeInput = useRef(null);
 
   /**
    * Automatically set the focus to the code input field when the component is rendered
    */
-  componentDidMount() {
-    if (this.codeInput) {
-      this.codeInput.focus();
+  useEffect(() => {
+    if (codeInput.current) {
+      codeInput.current.focus();
     }
-  }
-
-  /**
-   * Updates the code in the state when changing the input field
-   *
-   * @param {object} event
-   */
-  handleChangeCode(event) {
-    this.setState({
-      code: event.target.value,
-    });
-  }
-
-  /**
-   * Track enter key presses and submit the form if the field is valid
-   *
-   * @param {object} event
-   */
-  handleInputKeyUp(event) {
-    if (this.canSubmit() && event.keyCode === 13) {
-      this.handleSubmit();
-    }
-  }
-
-  /**
-   * Delegate the completion of verification/registration to the handler passed in as a prop. The
-   * MFA module will provide this as an API request to the TOTP backend handler's register() or
-   * verify() method.
-   */
-  handleSubmit() {
-    this.props.onCompleteVerification({ code: this.state.code });
-  }
+  }, []);
 
   /**
    * Determines whether the form can be submitted. This is true when on the "validate code"
@@ -73,9 +33,36 @@ class Verify extends Component {
    *
    * @returns {boolean}
    */
-  canSubmit() {
-    return this.state.code.length === this.props.codeLength;
-  }
+  const canSubmit = () => code.length === codeLength;
+
+  /**
+   * Updates the code in the state when changing the input field
+   *
+   * @param {object} event
+   */
+  const handleChangeCode = (event) => {
+    setCode(event.target.value);
+  };
+
+  /**
+   * Delegate the completion of verification/registration to the handler passed in as a prop. The
+   * MFA module will provide this as an API request to the TOTP backend handler's register() or
+   * verify() method.
+   */
+  const handleSubmit = () => {
+    onCompleteVerification({ code });
+  };
+
+  /**
+   * Track enter key presses and submit the form if the field is valid
+   *
+   * @param {object} event
+   */
+  const handleInputKeyUp = (event) => {
+    if (canSubmit() && event.keyCode === 13) {
+      handleSubmit();
+    }
+  };
 
   /**
    * Renders an action button menu with a Next and Back button, using a different handler for
@@ -83,11 +70,10 @@ class Verify extends Component {
    *
    * @returns {HTMLElement}
    */
-  renderActionsMenu() {
-    const { moreOptionsControl } = this.props;
+  const renderActionsMenu = () => {
     const { ss: { i18n } } = window;
 
-    const isNextDisabled = !this.canSubmit();
+    const isNextDisabled = !canSubmit();
 
     return (
       <ul className="mfa-action-list">
@@ -96,7 +82,7 @@ class Verify extends Component {
             type="button"
             className="btn btn-primary"
             disabled={isNextDisabled}
-            onClick={this.handleSubmit}
+            onClick={handleSubmit}
           >
             { i18n._t('TOTPVerify.NEXT', 'Next') }
           </button>
@@ -108,7 +94,7 @@ class Verify extends Component {
         )}
       </ul>
     );
-  }
+  };
 
   /**
    * If there is a configured support link, will render a link to the TOTP authenticator's
@@ -116,8 +102,8 @@ class Verify extends Component {
    *
    * @returns {HTMLElement}
    */
-  renderSupportLink() {
-    const { method: { supportLink, supportText } } = this.props;
+  const renderSupportLink = () => {
+    const { supportLink, supportText } = method;
     const { ss: { i18n } } = window;
 
     if (!supportLink) {
@@ -129,11 +115,9 @@ class Verify extends Component {
         {supportText || i18n._t('TOTPVerify.HOW_TO_USE', 'How to use authenticator apps.')}
       </a>
     );
-  }
+  };
 
-  renderVerifyForm() {
-    const { code } = this.state;
-    const { codeLength, error, method } = this.props;
+  const renderVerifyForm = () => {
     const { ss: { i18n } } = window;
 
     const formGroupClasses = classnames('mfa-totp__validate-left', 'form-group', {
@@ -146,7 +130,7 @@ class Verify extends Component {
           <p>{ i18n._t(
             'TOTPVerify.VERIFY',
             'Use verification code from your authenticator app. '
-          ) }{ this.renderSupportLink() }</p>
+          ) }{ renderSupportLink() }</p>
 
           <label htmlFor="totp-code" className="control-label form-label">
             {
@@ -164,9 +148,9 @@ class Verify extends Component {
             maxLength={codeLength}
             className="mfa-totp__code text form-control input-lg"
             value={code}
-            ref={this.setCodeInput}
-            onChange={this.handleChangeCode}
-            onKeyUp={this.handleInputKeyUp}
+            ref={codeInput}
+            onChange={handleChangeCode}
+            onKeyUp={handleInputKeyUp}
           />
           {error && <div className="help-block">{error}</div>}
         </div>
@@ -182,28 +166,22 @@ class Verify extends Component {
         )}
       </div>
     );
-  }
+  };
 
-  render() {
-    return (
-      <div className="mfa-totp__container mfa-totp__container--verify">
-        { this.renderVerifyForm() }
-        { this.renderActionsMenu() }
-      </div>
-    );
-  }
-}
+  return (
+    <div className="mfa-totp__container mfa-totp__container--verify">
+      { renderVerifyForm() }
+      { renderActionsMenu() }
+    </div>
+  );
+};
 
 Verify.propTypes = {
   codeLength: PropTypes.number,
   error: PropTypes.string,
   onCompleteVerification: PropTypes.func.isRequired,
   method: PropTypes.object.isRequired,
-};
-
-Verify.defaultProps = {
-  codeLength: 6,
-  error: null,
+  moreOptionsControl: PropTypes.node,
 };
 
 Verify.displayName = 'TOTPVerify';
