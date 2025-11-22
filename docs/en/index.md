@@ -14,6 +14,10 @@ The TOTP (Time-based One-Time Password) authenticator module adds an extra layer
 composer require silverstripe/totp-authenticator
 ```
 
+## GitHub repository
+
+<https://github.com/silverstripe/silverstripe-totp-authenticator>
+
 ## Configuration
 
 ### Encryption key
