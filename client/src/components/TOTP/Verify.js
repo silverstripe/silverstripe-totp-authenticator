@@ -53,7 +53,7 @@ class Verify extends Component {
    * @param {object} event
    */
   handleInputKeyUp(event) {
-    if (this.canSubmit() && event.keyCode === 13) {
+    if (this.canSubmit() && event.key === 'Enter') {
       this.handleSubmit();
     }
   }

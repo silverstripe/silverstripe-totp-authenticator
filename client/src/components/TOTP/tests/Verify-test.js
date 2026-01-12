@@ -56,7 +56,7 @@ test('Verify handleInputKeyUp() treats enter key as a form submission when code 
   );
   const input = await screen.findByLabelText('Enter {length}-digit code');
   fireEvent.change(input, { target: { value: '123456' } });
-  fireEvent.keyUp(input, { keyCode: 13 });
+  fireEvent.keyUp(input, { key: 'Enter' });
   expect(onCompleteVerification).toHaveBeenCalled();
 });
 
@@ -70,7 +70,7 @@ test('Verify handleInputKeyUp() does nothing when the code is invalid', async ()
   );
   const input = await screen.findByLabelText('Enter {length}-digit code');
   fireEvent.change(input, { target: { value: 'ABC' } });
-  fireEvent.keyUp(input, { keyCode: 13 });
+  fireEvent.keyUp(input, { key: 'Enter' });
   expect(onCompleteVerification).not.toHaveBeenCalled();
 });
 
