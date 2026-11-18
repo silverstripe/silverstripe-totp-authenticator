@@ -62,11 +62,14 @@ class RegisterHandler implements RegisterHandlerInterface
 
         $this->extend('updateTotp', $totp, $member);
 
+        $method = Injector::inst()->create(Method::class);
+
         return [
             'enabled' => !empty(Environment::getEnv('SS_MFA_SECRET_KEY')),
             'uri' => $totp->getProvisioningUri(),
             'code' => $totp->getSecret(),
-            'codeLength' => Injector::inst()->create(Method::class)->getCodeLength(),
+            'codeLength' => $method->getCodeLength(),
+            'autoSubmit' => $method->getAutoSubmit(),
         ];
     }
 

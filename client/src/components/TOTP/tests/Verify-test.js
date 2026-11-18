@@ -89,6 +89,66 @@ test('Verify handleSubmit() calls onCompleteVerification() and passes the code',
   expect(onCompleteVerification).toHaveBeenCalledWith({ code: '123456' });
 });
 
+test('Verify submits the code automatically once the full code length has been entered', async () => {
+  const onCompleteVerification = jest.fn();
+  render(
+    <Verify {...makeProps({
+      autoSubmit: true,
+      onCompleteVerification
+    })}
+    />
+  );
+  const input = await screen.findByLabelText('Enter {length}-digit code');
+  fireEvent.change(input, { target: { value: '12345' } });
+  expect(onCompleteVerification).not.toHaveBeenCalled();
+  fireEvent.change(input, { target: { value: '123456' } });
+  expect(onCompleteVerification).toHaveBeenCalledTimes(1);
+  expect(onCompleteVerification).toHaveBeenCalledWith({ code: '123456' });
+});
+
+test('Verify does not submit automatically by default', async () => {
+  const onCompleteVerification = jest.fn();
+  render(
+    <Verify {...makeProps({
+      onCompleteVerification
+    })}
+    />
+  );
+  const input = await screen.findByLabelText('Enter {length}-digit code');
+  fireEvent.change(input, { target: { value: '123456' } });
+  expect(onCompleteVerification).not.toHaveBeenCalled();
+});
+
+test('Verify strips whitespace from a pasted code and submits it', async () => {
+  const onCompleteVerification = jest.fn();
+  render(
+    <Verify {...makeProps({
+      autoSubmit: true,
+      onCompleteVerification
+    })}
+    />
+  );
+  const input = await screen.findByLabelText('Enter {length}-digit code');
+  fireEvent.paste(input, { clipboardData: { getData: () => ' 123 456\n' } });
+  expect(input.value).toBe('123456');
+  expect(onCompleteVerification).toHaveBeenCalledWith({ code: '123456' });
+});
+
+test('Verify does not submit again when enter is pressed after an automatic submission', async () => {
+  const onCompleteVerification = jest.fn();
+  render(
+    <Verify {...makeProps({
+      autoSubmit: true,
+      onCompleteVerification
+    })}
+    />
+  );
+  const input = await screen.findByLabelText('Enter {length}-digit code');
+  fireEvent.change(input, { target: { value: '123456' } });
+  fireEvent.keyUp(input, { key: 'Enter' });
+  expect(onCompleteVerification).toHaveBeenCalledTimes(1);
+});
+
 test('Verify renderSupportLink() renders nothing when no support link is defined in the method', async () => {
   render(
     <Verify {...makeProps({

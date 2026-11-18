@@ -13,6 +13,7 @@ use SilverStripe\MFA\Store\SessionStore;
 use SilverStripe\MFA\Store\StoreInterface;
 use SilverStripe\Security\Member;
 use SilverStripe\SiteConfig\SiteConfig;
+use SilverStripe\TOTP\Method;
 use SilverStripe\TOTP\RegisterHandler;
 
 class RegisterHandlerTest extends SapphireTest
@@ -62,6 +63,14 @@ class RegisterHandlerTest extends SapphireTest
             $store->getState()['secret'],
             'TOTP secret should be saved to StoreInterface'
         );
+        $this->assertFalse($result['autoSubmit'], 'Auto-submit should be disabled by default');
+    }
+
+    public function testStartWithAutoSubmitEnabled()
+    {
+        Method::config()->set('auto_submit', true);
+        $result = $this->handler->start(new SessionStore($this->member));
+        $this->assertTrue($result['autoSubmit']);
     }
 
     public function testRegisterWithInvalidCode()

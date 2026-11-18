@@ -28,6 +28,14 @@ class Method implements MethodInterface
      */
     private static $code_length = 6;
 
+    /**
+     * Submit the code automatically once the full code length has been entered
+     *
+     * @config
+     * @var bool
+     */
+    private static $auto_submit = false;
+
     public function getName(): string
     {
         return _t(__CLASS__ . '.NAME', 'Authenticator app');
@@ -85,5 +93,15 @@ class Method implements MethodInterface
     public function getCodeLength(): int
     {
         return (int) $this->config()->get('code_length');
+    }
+
+    /**
+     * Whether the code should be submitted automatically once the full code length has been entered
+     *
+     * @return bool
+     */
+    public function getAutoSubmit(): bool
+    {
+        return (bool) $this->config()->get('auto_submit');
     }
 }
