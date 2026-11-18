@@ -22,7 +22,12 @@ class Verify extends Component {
       this.codeInput = element;
     };
 
+    // Prevents the same code from being submitted twice, e.g. by an auto-submit followed by
+    // an enter key press
+    this.submitted = false;
+
     this.handleChangeCode = this.handleChangeCode.bind(this);
+    this.handlePasteCode = this.handlePasteCode.bind(this);
     this.handleInputKeyUp = this.handleInputKeyUp.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -42,8 +47,38 @@ class Verify extends Component {
    * @param {object} event
    */
   handleChangeCode(event) {
-    this.setState({
-      code: event.target.value,
+    this.updateCode(event.target.value);
+  }
+
+  /**
+   * Handles pasting a code into the input field. Whitespace is stripped before the input's
+   * maxLength is applied, so a code copied as "123 456" is not truncated.
+   *
+   * @param {object} event
+   */
+  handlePasteCode(event) {
+    if (!event.clipboardData) {
+      return;
+    }
+    event.preventDefault();
+    this.updateCode(event.clipboardData.getData('text'));
+  }
+
+  /**
+   * Stores the code without whitespace in the state, and submits it automatically once the full
+   * code length has been entered (if auto-submit is enabled)
+   *
+   * @param {string} value
+   */
+  updateCode(value) {
+    const { autoSubmit, codeLength } = this.props;
+    const code = value.replace(/\s/g, '').slice(0, codeLength);
+
+    this.submitted = false;
+    this.setState({ code }, () => {
+      if (autoSubmit && this.canSubmit()) {
+        this.handleSubmit();
+      }
     });
   }
 
@@ -64,6 +99,10 @@ class Verify extends Component {
    * verify() method.
    */
   handleSubmit() {
+    if (this.submitted) {
+      return;
+    }
+    this.submitted = true;
     this.props.onCompleteVerification({ code: this.state.code });
   }
 
@@ -166,6 +205,7 @@ class Verify extends Component {
             value={code}
             ref={this.setCodeInput}
             onChange={this.handleChangeCode}
+            onPaste={this.handlePasteCode}
             onKeyUp={this.handleInputKeyUp}
           />
           {error && <div className="help-block">{error}</div>}
@@ -195,6 +235,7 @@ class Verify extends Component {
 }
 
 Verify.propTypes = {
+  autoSubmit: PropTypes.bool,
   codeLength: PropTypes.number,
   error: PropTypes.string,
   onCompleteVerification: PropTypes.func.isRequired,
@@ -202,6 +243,7 @@ Verify.propTypes = {
 };
 
 Verify.defaultProps = {
+  autoSubmit: false,
   codeLength: 6,
   error: null,
 };

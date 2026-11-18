@@ -94,7 +94,15 @@ class VerifyHandlerTest extends SapphireTest
         $result = $this->handler->start($this->store, $this->member->RegisteredMFAMethods()->first());
         $this->assertTrue($result['enabled']);
         $this->assertGreaterThan(1, $result['codeLength']);
+        $this->assertFalse($result['autoSubmit']);
         $this->assertSame('ABCD1234', $this->store->getState()['secret']);
+    }
+
+    public function testStartWithAutoSubmitEnabled()
+    {
+        Method::config()->set('auto_submit', true);
+        $result = $this->handler->start($this->store, $this->member->RegisteredMFAMethods()->first());
+        $this->assertTrue($result['autoSubmit']);
     }
 
     public function testVerify()

@@ -59,6 +59,21 @@ SilverStripe\TOTP\Method:
   code_length: 10
 ```
 
+### Automatically submitting the code
+
+By default, users submit their TOTP code by pressing enter or clicking "Next". You can enable
+[`Method.auto_submit`](api:SilverStripe\TOTP\Method->auto_submit) to submit the code automatically as soon as it
+reaches the configured code length, whether it is typed or pasted. This applies to both logging in and registering.
+This is disabled by default, because submitting a form on input changes the context without the user requesting it
+(see [WCAG 3.2.2 On Input](https://www.w3.org/WAI/WCAG22/Understanding/on-input.html)).
+
+```yml
+SilverStripe\TOTP\Method:
+  auto_submit: true
+```
+
+Whitespace is always stripped from the entered code, so a code pasted as "123 456" is accepted as "123456".
+
 ### User help link
 
 When this method is used on the website during the multi-factor login process, it may show a "find out more" link

@@ -70,6 +70,7 @@ class VerifyHandler implements VerifyHandlerInterface
         return [
             'enabled' => $enabled,
             'codeLength' => $method->getMethod()->getCodeLength(),
+            'autoSubmit' => $method->getMethod()->getAutoSubmit(),
         ];
     }
 
