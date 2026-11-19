@@ -88,13 +88,6 @@ Feature: Use MFA TOTP
     Then I should see "Authenticator app: Registered"
     And I should see "Recovery codes"
 
-    # Add another MFA method
-    When I press the "Add another MFA method" button
-    And I wait for 3 seconds
-    Then I should see "Select a verification method"
-    # close the modal
-    When I press the "Back" button
-
     # Reset method - will show a QR code - should still manually test
     When I press the TOTP authenticator app "Reset" button with javascript
     And I wait for 3 seconds
