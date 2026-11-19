@@ -14,17 +14,16 @@
     "license": "BSD-3-Clause",
     "require": {
         "php": "^8.3",
-        "silverstripe/mfa": "^6",
-        "silverstripe/siteconfig": "^6",
+        "silverstripe/mfa": "^7",
+        "silverstripe/siteconfig": "^7",
         "spomky-labs/otphp": "^11.3",
         "paragonie/constant_time_encoding": "^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^11.3",
         "silverstripe/documentation-lint": "^2",
-        "silverstripe/recipe-testing": "^4",
-        "silverstripe/webauthn-authenticator": "^6",
-        "silverstripe/frameworktest": "^2",
+        "silverstripe/recipe-testing": "^5",
+        "silverstripe/frameworktest": "^3",
         "silverstripe/standards": "^1",
         "phpstan/extension-installer": "^1.3"
     },
