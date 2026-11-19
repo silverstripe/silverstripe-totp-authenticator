@@ -62,12 +62,10 @@ Feature: Use MFA TOTP
     And I log in with "NO_ACCESS@example.org" and "Secret!123" without skipping MFA
     Then I should not see "Add extra security to your account"
 
-  Scenario: User can select a verification method, handles incorrect TOTP codes
+  Scenario: User registering TOTP is told when the code is incorrect
     When I log in with "EDITOR@example.org" and "Secret!123" without skipping MFA
+    # TOTP is the only method so the select method screen is skipped
     And I press the "Get started" button
-    And I should see "Select a verification method"
-    When I click on the "img[alt='Authenticator app']" element
-    And I press the "Next" button
     # QR code screen
     And I press the "Next" button
     # Enter invalid code
